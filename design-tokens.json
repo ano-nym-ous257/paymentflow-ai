@@ -86,6 +86,7 @@
     "12": "3rem"
   },
   "radius": {
+    "base": "8px",
     "sm": "6px",
     "md": "12px",
     "lg": "18px",

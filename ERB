@@ -33,7 +33,7 @@ This Engineering Repository Blueprint (ERB) is the official engineering handbook
 - **Type safety** across services (TypeScript, Python typing).
 - **Linting and formatting** enforced in CI.
 - **Comprehensive tests** with coverage gates.
-- **API contracts** in OpenAPI and event schemas in a central registry.
+- **API contracts** are added in OpenAPI, with event schemas in a central registry, when implementation of the owning domain begins.
 - **Peer review** mandatory for all changes.
 
 #### Architecture Principles
@@ -142,7 +142,7 @@ paymentflow-ai/
 - **docs** — Architecture docs, runbooks, and onboarding guides.
 
 #### Monorepo rules
-- **Single source of truth** for shared types and API contracts.
+- **Single source of truth** for each implemented shared type and API contract; planned contracts must not be presented as existing artifacts.
 - **Per-service ownership**: each service team owns its folder and CI jobs.
 - **Atomic PRs**: changes touching multiple services must include coordinated tests and migration plans.
 - **Versioning**: packages use semantic versioning; services use independent versioning.

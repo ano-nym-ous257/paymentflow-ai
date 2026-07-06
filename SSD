@@ -69,11 +69,6 @@
 # SECTION 2: HIGH LEVEL ARCHITECTURE
 
 ### Visual overview
-`(High-level diagram — textual + inline visual placeholder)`
-
-`
-
-`
 
 ```
 Clients
@@ -95,7 +90,7 @@ Microservices (K8s)
   └─ Integrations (Payment Rails, FX Providers, Banks)
 
 Data Plane
-  ├─ PostgreSQL (per-service DBs)
+  ├─ PostgreSQL (service-owned schemas in the MVP; separable databases at scale)
   ├─ Redis (caches, locks)
   ├─ Kafka (events)
   └─ S3 (objects, statements)
@@ -126,7 +121,7 @@ Infra
 - **Prompt Orchestration & Context Store:** For Copilot and recommendation engines.
 
 **Data Layer**
-- **Primary DB:** PostgreSQL (per-service instances with logical separation).
+- **Primary DB:** PostgreSQL with service-owned schemas and roles in the MVP. Domains may move to dedicated databases when scale, isolation, or regulatory requirements justify the operational cost.
 - **Cache:** Redis for hot reads, locks, and rate-limiting counters.
 - **Event Bus:** Kafka for events and stream processing.
 - **Object Storage:** S3-compatible for statements, attachments, logs.
@@ -1139,4 +1134,3 @@ This SDD provides a complete, modular, and auditable architecture for PaymentFlo
 
 **Prepared by:** PaymentFlow AI Architecture Team  
 **Contact:** architecture@paymentflow.ai
-

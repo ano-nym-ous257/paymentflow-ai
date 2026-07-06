@@ -7,6 +7,21 @@ const copilotForm = document.querySelector(".chat-compose");
 const copilotInput = document.querySelector("#copilotInput");
 const chatStream = document.querySelector(".chat-stream");
 const promptButtons = [...document.querySelectorAll(".prompt-row button")];
+const globalSearchForm = document.querySelector(".search");
+const globalSearchInput = document.querySelector("#globalSearch");
+const prototypeNotice = document.querySelector("#prototypeNotice");
+let noticeTimer;
+
+function showPrototypeNotice(message) {
+  if (!prototypeNotice) return;
+
+  window.clearTimeout(noticeTimer);
+  prototypeNotice.textContent = message;
+  prototypeNotice.hidden = false;
+  noticeTimer = window.setTimeout(() => {
+    prototypeNotice.hidden = true;
+  }, 3600);
+}
 
 function setView(viewId) {
   views.forEach((view) => {
@@ -73,6 +88,13 @@ menuButton?.addEventListener("click", () => {
   menuButton.setAttribute("aria-expanded", String(Boolean(isOpen)));
 });
 
+document.addEventListener("keydown", (event) => {
+  if (event.key !== "Escape" || !rail?.classList.contains("is-open")) return;
+  rail.classList.remove("is-open");
+  menuButton?.setAttribute("aria-expanded", "false");
+  menuButton?.focus();
+});
+
 promptButtons.forEach((button) => {
   button.addEventListener("click", () => {
     setView("ai");
@@ -89,4 +111,26 @@ copilotForm?.addEventListener("submit", (event) => {
   appendMessage(prompt, "user");
   appendMessage(generateCopilotReply(prompt), "ai");
   copilotInput.value = "";
+});
+
+globalSearchForm?.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const query = globalSearchInput?.value.trim();
+  if (!query) return;
+
+  showPrototypeNotice(`Search for “${query}” is ready for backend integration; no live records were queried.`);
+});
+
+const prototypeActionButtons = [...document.querySelectorAll("button")].filter(
+  (button) =>
+    !button.matches(
+      "[data-view], [data-view-trigger], #menuButton, .prompt-row button, .chat-compose button[type='submit']",
+    ),
+);
+
+prototypeActionButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    const action = button.getAttribute("aria-label") || button.textContent.trim() || "This action";
+    showPrototypeNotice(`${action} is a prototype control; it does not move money or change live data.`);
+  });
 });

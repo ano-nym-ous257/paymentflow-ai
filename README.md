@@ -7,10 +7,20 @@ PaymentFlow AI is a high-fidelity fintech platform prototype and design system f
 Open `index.html` in a browser:
 
 ```bash
-open paymentflow-ai/index.html
+open index.html
 ```
 
 The prototype is self-contained and does not require a build step or external dependencies.
+It is a design and interaction demonstrator: balances, platform status, risk scores, forecasts,
+and AI responses are illustrative data rather than live financial results.
+
+## Current Implementation Status
+
+- Implemented: the static responsive prototype, design tokens, starter components, and planning documents.
+- Not implemented: production applications, APIs, authentication, databases, payment rails, AI models,
+  infrastructure, CI/CD, and automated tests.
+- Milestone specifications are being written before implementation begins. Empty milestone files are
+  placeholders and do not indicate completed work.
 
 ## Included Deliverables
 
@@ -46,7 +56,7 @@ The aesthetic combines premium dark fintech, enterprise SaaS density, glassmorph
 
 - `index.html`: Product screens, mockups, information architecture, and handoff content.
 - `PRD-PaymentFlow-AI.md`: Enterprise product requirements document for PaymentFlow AI.
-- `styles.css`: Production-ready responsive styling and design system primitives.
+- `styles.css`: Responsive prototype styling and design system primitives.
 - `app.js`: Prototype navigation, mobile menu, and AI Copilot interactions.
 - `design-tokens.json`: Portable token source for design and engineering handoff.
 - `HANDOFF.md`: Implementation guidance for product, design, and engineering teams.

@@ -6,7 +6,7 @@
     <title>PaymentFlow AI - Fintech Platform Design</title>
     <meta
       name="description"
-      content="Production-ready design system and high-fidelity prototype for PaymentFlow AI."
+      content="High-fidelity static prototype and design-system direction for PaymentFlow AI."
     >
     <link rel="stylesheet" href="./styles.css">
   </head>
@@ -71,13 +71,13 @@
           <button class="menu-button" type="button" id="menuButton" aria-controls="rail" aria-expanded="false">
             Menu
           </button>
-          <div class="search" role="search">
+          <form class="search" role="search">
             <label class="sr-only" for="globalSearch">Search PaymentFlow AI</label>
             <input id="globalSearch" type="search" placeholder="Search users, invoices, payments, AI insights">
-          </div>
-          <div class="topbar-status" aria-label="Platform status">
+          </form>
+          <div class="topbar-status" aria-label="Illustrative platform status">
             <span class="status-dot status-dot--green"></span>
-            Live systems
+            Illustrative status
           </div>
           <button class="ai-command" type="button" data-view-trigger="ai">
             Ask AI
@@ -86,7 +86,7 @@
 
         <section class="command-strip" aria-label="PaymentFlow AI overview">
           <div class="command-copy">
-            <span class="eyebrow">Billion-dollar fintech platform concept</span>
+            <span class="eyebrow">High-fidelity fintech platform concept • illustrative data</span>
             <h1>PaymentFlow AI unifies banking, payments, treasury, fraud, and financial intelligence.</h1>
           </div>
           <div class="command-metrics">
@@ -103,7 +103,7 @@
             <article>
               <span>Fraud blocked</span>
               <strong>$2.1M</strong>
-              <small>99.982% model precision</small>
+              <small>Illustrative prototype metric</small>
             </article>
           </div>
         </section>
@@ -772,7 +772,7 @@
         <section class="view" id="system" aria-labelledby="system-title">
           <div class="section-heading">
             <span class="eyebrow">Design System and Handoff</span>
-            <h2 id="system-title">Production-ready foundations for PaymentFlow AI.</h2>
+            <h2 id="system-title">Design foundations for future PaymentFlow AI implementation.</h2>
             <p>
               The system balances premium dark fintech polish with enterprise density, accessibility,
               and responsive behavior across mobile consumer flows and desktop operations.
@@ -839,7 +839,7 @@
               <h3>Responsive layouts</h3>
               <p>
                 Personal screens use a single-column phone frame first. Business, risk, treasury, and
-                admin use desktop grids that collapse to stacked panels below 900px.
+                admin use desktop grids that simplify below 1100px and stack into one column below 760px.
               </p>
               <div class="layout-chips">
                 <span>360 mobile</span><span>768 tablet</span><span>1440 desktop</span>
@@ -860,6 +860,15 @@
         </section>
       </main>
     </div>
+
+    <div
+      class="prototype-notice"
+      id="prototypeNotice"
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+      hidden
+    ></div>
 
     <script src="./app.js"></script>
   </body>

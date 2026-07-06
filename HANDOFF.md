@@ -20,6 +20,14 @@ PaymentFlow AI uses a premium dark fintech foundation with restrained glass surf
 
 Full tokens are available in `design-tokens.json`.
 
+## Current Implementation Boundary
+
+This repository currently contains a static prototype and planning artifacts. All displayed financial
+values, status indicators, risk scores, forecasts, routing decisions, and AI responses are illustrative.
+No production applications, APIs, databases, payment integrations, or AI models are implemented yet.
+Milestone specifications may be drafted before Milestone 0 begins; a specification is not evidence that
+its milestone has been implemented.
+
 ## Component Library
 
 The prototype defines these reusable UI patterns:
@@ -95,7 +103,7 @@ The prototype defines these reusable UI patterns:
 ## Accessibility Notes
 
 - Navigation uses real buttons and `aria-pressed` state.
-- The top search has a semantic search role.
+- The top search has a semantic search role and prototype-only feedback when submitted.
 - Charts and visualizations include descriptive labels.
 - Focus states are visible through a blue focus ring token.
 - Status chips include text labels, not color alone.

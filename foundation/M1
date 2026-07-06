@@ -1,0 +1,7 @@
+# Milestone 1 — Specification Placeholder
+
+Status: not yet specified and not implemented.
+
+This file is reserved for the future Authentication and Identity milestone specification. M1 depends
+on the approved completion of M0. Its scope, threat model, API contracts, acceptance criteria, test plan,
+and definition of done must be reviewed and approved before implementation begins.

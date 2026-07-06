@@ -1,12 +1,17 @@
 ### SECTION 1: DATABASE ARCHITECTURE OVERVIEW
 
 **Purpose**  
-Provide a production-ready PostgreSQL database architecture and complete ERD for PaymentFlow AI that supports banking-grade transactions, double-entry accounting, auditability, multi-currency operations, AI features, fraud analysis, compliance, and global scale.
+Provide the target PostgreSQL database architecture and ERD for PaymentFlow AI. This is an implementation specification that must be validated through migrations, tests, threat modeling, performance testing, and compliance review before production use.
 
 **Domain Driven Design**  
-- **Domains** are mapped to separate logical schemas and service ownership. Each domain owns its tables and data contracts. Cross-domain references use foreign keys where appropriate and event-driven denormalized copies for analytics.
+- **Domains** are mapped to separate logical schemas and service ownership. Each domain owns its tables and data contracts. During the MVP, the schemas may share one managed PostgreSQL deployment, allowing the cross-schema foreign keys documented here. If a domain is later moved to a separate database, those physical foreign keys must become logical UUID references validated through service contracts and events.
 - **Schemas**: `identity`, `wallets`, `payments`, `ledger`, `business`, `treasury`, `fraud`, `ai`, `compliance`, `audit`, `notifications`, `analytics`.
 - **Service ownership**: Each microservice owns its schema and primary tables. Example mapping: Auth Service → `identity`; Wallet Service → `wallets`; Payment Service → `payments`; Ledger Service → `ledger`; Fraud Service → `fraud`; AI Copilot → `ai`; Compliance Service → `compliance`; Audit Service → `audit`; Analytics pipelines write to `analytics` and data warehouse.
+
+**Deployment model**
+- **MVP**: one managed PostgreSQL deployment with service-owned schemas, separate database roles, and no direct cross-domain writes.
+- **Scale-out**: independently move high-volume or regulated domains to dedicated databases. Preserve relationships through immutable identifiers, versioned APIs, an outbox pattern, and Kafka events.
+- The ERD expresses both physical MVP relationships and logical domain relationships. Application code must access another domain through its service contract, never by writing directly to that domain's tables.
 
 **Data boundaries and patterns**  
 - **Transactional domain**: Strong ACID guarantees for ledger, wallets, payments. Use Postgres primary instances with synchronous replicas in-region for HA.
@@ -1249,4 +1254,4 @@ CREATE TABLE ledger.journal_entry_lines_2026_06 PARTITION OF ledger.journal_entr
 
 ## Closing summary
 
-This database architecture and ERD provide a production-ready foundation for PaymentFlow AI. It enforces **financial integrity** via a ledger-first design, supports **multi-currency** and **cross-border** flows, enables **AI** and **fraud** analytics, and meets **regulatory** and **audit** requirements. The design is modular, partitioned, and ready to scale from early pilots to global deployments.
+This database architecture and ERD define a target foundation for PaymentFlow AI. The design aims to enforce **financial integrity** through a ledger-first model and support multi-currency, cross-border, AI, fraud, regulatory, and audit use cases. Production readiness remains conditional on implementation, automated invariants, migration testing, security review, load testing, recovery drills, and jurisdiction-specific compliance approval.

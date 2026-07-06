@@ -378,7 +378,7 @@ Acceptance Criteria
 - Multi-region deployment for low latency and disaster recovery
 
 ### Availability
-- SLA target: 99.95% for public APIs; 99.99% for critical payments pipelines during business hours
+- SLA target: 99.95% monthly availability for public APIs and 99.99% monthly availability for the critical payment and ledger path, excluding documented maintenance windows
 - Multi-AZ, warm standby, and automated failover strategies
 
 ### Security
@@ -577,8 +577,10 @@ Rate Limits
 
 ### Entities (core)
 - Users (id, email, phone, kyc_status, role, created_at, metadata)
-- Accounts/Wallets (id, user_id/org_id, currency, balance, ledger_id, status)
-- LedgerEntries (id, wallet_id, amount, type, reference, created_at)
+- Accounts/Wallets (id, user_id/org_id, currency, status; displayed balances are derived from ledger postings)
+- LedgerAccounts (id, owner_type, owner_id, currency, account_type, status)
+- JournalEntries (id, reference, status, effective_at, created_at)
+- JournalEntryLines (id, journal_entry_id, ledger_account_id, debit, credit, currency)
 - Payments (id, from_wallet, to, amount, currency, status, provider_route, score)
 - Invoices (id, issuer_id, recipient, lines, total, status, due_date)
 - PayrollRuns (id, org_id, total_amount, status, approval_history)
@@ -588,12 +590,15 @@ Rate Limits
 
 ### Relationships
 - User -> Wallets (1:N)
-- Wallet -> LedgerEntries (1:N)
+- Wallet -> LedgerAccounts (1:N)
+- JournalEntry -> JournalEntryLines (1:N, minimum two lines)
+- LedgerAccount -> JournalEntryLines (1:N)
 - Invoice -> Payments (1:N or 1:0)
 - Organization -> PayrollRuns (1:N)
 
 ### Business Rules
-- Ledger is the system of record; all balance changes are recorded as ledger entries and reconciled nightly.
+- Ledger journals are the system of record; every committed journal must balance debits and credits, and committed postings are immutable.
+- Balances are derived from committed journal lines. Continuous reconciliation detects drift, with a nightly full reconciliation as a backstop.
 - Idempotency must be enforced for payments via unique client-provided key.
 
 ### Data Retention & Privacy
