@@ -1,3 +1,9 @@
+# PaymentFlow AI — Entity Relationship Document (ERD)
+
+Status: target architecture; not implemented.
+
+---
+
 ### SECTION 1: DATABASE ARCHITECTURE OVERVIEW
 
 **Purpose**  

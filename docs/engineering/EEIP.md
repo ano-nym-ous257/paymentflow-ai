@@ -1,7 +1,7 @@
 # Enterprise Engineering Implementation Plan
 **PaymentFlow AI** — AI‑powered fintech platform
 **Audience:** CTOs, Engineering Managers, Technical Leads, Product Managers, Scrum Masters, QA, DevOps, AI coding agents
-**Purpose:** Transform the Product Blueprint, PRD, SDD, ERD, and ERB—plus OpenAPI and event contracts created during implementation—into an actionable, time‑boxed engineering roadmap from first commit to production launch.
+**Purpose:** Transform the PRD, SDD, ERD, and ERB—plus OpenAPI and event contracts created during implementation—into an actionable, time‑boxed engineering roadmap from first commit to production launch.
 
 ---
 

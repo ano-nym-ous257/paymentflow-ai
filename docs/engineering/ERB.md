@@ -1,4 +1,4 @@
-### Engineering Repository Blueprint — PaymentFlow AI
+# PaymentFlow AI — Engineering Repository Blueprint (ERB)
 
 **Purpose**  
 This Engineering Repository Blueprint (ERB) is the official engineering handbook for PaymentFlow AI. It defines repository layout, collaboration workflows, coding standards, architecture patterns, CI/CD, security, testing, and onboarding. It is written for engineers, architects, DevOps, AI teams, security, and new hires so they can contribute immediately and safely to a global, production-grade fintech platform.

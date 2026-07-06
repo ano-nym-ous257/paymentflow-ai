@@ -848,5 +848,5 @@ A feature is production ready only when all items below are satisfied.
 
 This manual is the authoritative engineering governance document for PaymentFlow AI. It is mandatory for all contributors and AI coding assistants. Changes to this manual must be proposed via an ADR and approved by the architecture board. The manual will be reviewed quarterly and updated as the platform evolves.
 
-**Location**: `docs/engineering-governance.md` in the monorepo.
+**Location**: `docs/engineering/EGDSM.md` in the monorepo.
 **Owners**: Platform Engineering, Security, and Architecture Board.

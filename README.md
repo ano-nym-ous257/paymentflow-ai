@@ -55,8 +55,31 @@ The aesthetic combines premium dark fintech, enterprise SaaS density, glassmorph
 ## Files
 
 - `index.html`: Product screens, mockups, information architecture, and handoff content.
-- `PRD-PaymentFlow-AI.md`: Enterprise product requirements document for PaymentFlow AI.
 - `styles.css`: Responsive prototype styling and design system primitives.
 - `app.js`: Prototype navigation, mobile menu, and AI Copilot interactions.
 - `design-tokens.json`: Portable token source for design and engineering handoff.
-- `HANDOFF.md`: Implementation guidance for product, design, and engineering teams.
+- `design/`: Starter design-system documentation and React component examples.
+- `docs/`: Ordered product, architecture, engineering, milestone, and handoff documentation.
+
+Start with [`docs/README.md`](docs/README.md) for the complete document order and status of each milestone.
+
+## Repository Structure
+
+```text
+paymentflow-ai/
+├── index.html
+├── styles.css
+├── app.js
+├── design-tokens.json
+├── design/
+│   ├── README.md
+│   ├── design-tokens.scss
+│   └── components/
+└── docs/
+    ├── README.md
+    ├── product/
+    ├── architecture/
+    ├── engineering/
+    ├── milestones/
+    └── handoff/
+```

@@ -18,7 +18,7 @@ PaymentFlow AI uses a premium dark fintech foundation with restrained glass surf
 - Radius: `8px` for cards, buttons, controls, and panels
 - Motion: 160ms to 360ms for interaction, with reduced-motion support
 
-Full tokens are available in `design-tokens.json`.
+Full tokens are available in [`design-tokens.json`](../../design-tokens.json).
 
 ## Current Implementation Boundary
 

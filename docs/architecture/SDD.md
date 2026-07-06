@@ -1,6 +1,6 @@
-### System Design Document — PaymentFlow AI
+# PaymentFlow AI — System Design Document (SDD)
 
-**Document purpose:** Complete enterprise-grade System Design Document (SDD) for **PaymentFlow AI**, an AI-powered fintech ecosystem supporting Consumer Banking, Business Banking, Cross‑Border Payments, Multi‑Currency Wallets, Treasury Management, Fraud Detection, Smart Routing, AI Financial Copilot, Analytics, Invoicing, Payroll and Compliance. This SDD is written for senior architects, fintech engineers, security engineers, DevOps, AI engineers, compliance teams, and investors.
+**Document purpose:** Define the target enterprise system design for **PaymentFlow AI**, an AI-powered fintech ecosystem supporting Consumer Banking, Business Banking, Cross‑Border Payments, Multi‑Currency Wallets, Treasury Management, Fraud Detection, Smart Routing, AI Financial Copilot, Analytics, Invoicing, Payroll and Compliance. This SDD is written for senior architects, fintech engineers, security engineers, DevOps, AI engineers, compliance teams, and investors.
 
 ---
 
@@ -1120,7 +1120,7 @@ If High -> Hold payment, create case in Fraud Center, notify Admin
 
 ## Closing notes for reviewers
 
-This SDD provides a complete, modular, and auditable architecture for PaymentFlow AI. The design prioritizes financial integrity, regulatory compliance, and AI-driven value while enabling global scale. The next steps are:
+This SDD defines the target modular and auditable architecture for PaymentFlow AI. The design prioritizes financial integrity, regulatory compliance, and AI-driven value while enabling global scale. Production readiness depends on implementation and validation. The next steps are:
 
 1. **Architecture review** with security, compliance, and treasury stakeholders.
 2. **Proof-of-concept** for ledger and cross-border routing.
