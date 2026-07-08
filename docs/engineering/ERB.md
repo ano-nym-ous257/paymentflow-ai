@@ -776,33 +776,37 @@ export class WalletController {
 
 ### SECTION 19 — ENGINEERING ROADMAP
 
-#### Milestone 0 Foundation 0–3 months
-- Monorepo scaffold, CI, infra baseline, auth service, user service, basic web app.
-- Deliverables: repo, infra, auth, onboarding docs.
+#### Milestone 0 Foundation
+- Monorepo scaffold, local development environment, CI/CD baseline, infrastructure skeleton, shared packages, contract folders, security scanning, documentation rules, and service health-check scaffolds.
+- Deliverables: repo foundation, local stack, CI quality gates, infrastructure skeleton, onboarding docs.
 
-#### Milestone 1 Core Platform 3–9 months
-- Wallet service, ledger service, transaction service, basic payments internal rails.
-- Deliverables: ledger, wallet, reconciliation pipelines, audit service.
+#### Milestone 1 Authentication and Identity
+- Auth Service, User Service, registration, login, OAuth2/OIDC-compatible token flows, sessions, MFA, device tracking, RBAC, tenant-aware authorization foundations, and identity audit events.
+- Deliverables: identity schema, auth APIs, user APIs, token/session lifecycle, MFA flows, RBAC enforcement, contract tests.
 
-#### Milestone 2 Payments and Wallets 9–15 months
-- External provider adapters, routing service, multi-currency support.
-- Deliverables: cross-border pilot, routing, FX integration.
+#### Milestone 2 Ledger Engine
+- Banking-grade immutable double-entry ledger, chart of accounts, journal entries, posting engine, balance derivation, reversals, adjustments, reconciliation, and ledger APIs.
+- Deliverables: ledger schema, posting engine, balance engine, reconciliation workflows, audit-ready financial records.
 
-#### Milestone 3 Business Platform 15–24 months
-- Invoicing, payroll, company dashboards, admin portal.
-- Deliverables: invoice flows, payroll engine, KYC/KYB integration.
+#### Milestone 3 Wallet Service
+- Multi-currency wallet lifecycle, wallet accounts mapped to ledger accounts, available/pending/reserved balance views, holds, funding readiness, and wallet APIs.
+- Deliverables: wallet service, wallet APIs, ledger-backed balance reads, wallet events, wallet test suite.
 
-#### Milestone 4 AI Platform 18–30 months
-- AI Copilot, forecasting, fraud ML pipelines, feature store.
-- Deliverables: Copilot beta, fraud models, treasury forecasting.
+#### Milestone 4 Payments and Transactions
+- Payment orchestration, transaction state machine, beneficiaries, idempotency, internal transfers, scheduled and recurring payment foundations, and failure handling.
+- Deliverables: payment APIs, transaction records, beneficiary APIs, idempotency controls, internal transfer flow.
 
-#### Milestone 5 Treasury and Routing 24–36 months
-- Treasury automation, liquidity management, hedging recommendations.
-- Deliverables: automated sweeps, treasury dashboards.
+#### Milestone 5 External Rails, FX, and Reconciliation
+- Provider adapters, FX quotes and conversions, external settlement, webhook handling, provider reconciliation, and route fallback foundations.
+- Deliverables: provider integration contracts, FX workflows, settlement handling, reconciliation reports.
 
-#### Milestone 6 Global Expansion 36–60 months
-- Multi-region active-active, data residency, certifications (PCI, SOC2).
-- Deliverables: global rollout, compliance certifications, enterprise SLAs.
+#### Milestone 6 Business Platform
+- Invoicing, payroll, company dashboards, business roles, approval flows, and operational admin workflows.
+- Deliverables: invoice flows, payroll engine, company/team model, admin workflows, KYC/KYB integration points.
+
+#### Milestone 7 AI, Fraud, Treasury, and Global Scale
+- AI Copilot, forecasting, fraud models, smart routing, treasury automation, multi-region deployment, data residency, and compliance certifications.
+- Deliverables: Copilot beta, fraud/risk models, treasury dashboards, routing optimization, compliance and enterprise-readiness artifacts.
 
 ---
 

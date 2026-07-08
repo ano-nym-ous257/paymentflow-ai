@@ -18,14 +18,18 @@ product and architecture; they do not indicate that the corresponding production
 
 | Milestone | Document | Status |
 | --- | --- | --- |
-| M0 | [Foundation](milestones/M0.md) | Specification placeholder; not implemented |
-| M1 | [Authentication and Identity](milestones/M1.md) | Specification placeholder; not implemented |
+| M0 | [Foundation](milestones/M0.md) | Draft specification; not implemented |
+| M1 | [Authentication and Identity](milestones/M1.md) | Draft specification; not implemented |
 | M2 | [Ledger Engine](milestones/M2.md) | Draft specification; not implemented |
+| M3 | [Wallet Service](milestones/M3.md) | Draft specification; not implemented |
 
-Add future milestones as `M3.md`, `M4.md`, and so on. Every milestone document should state its status,
-dependencies, scope, deliverables, acceptance criteria, security requirements, test plan, observability,
-rollback strategy, and definition of done. Milestone numbers are implementation dependencies and are not
-the same thing as sprint numbers in the implementation plan.
+The current canonical milestone sequence begins with M0 Foundation, M1 Authentication and Identity,
+M2 Ledger Engine, and M3 Wallet Service. Add future milestones as `M4.md`, `M5.md`, and so on. The
+next expected milestone after M3 is M4 Payments Service unless the roadmap is intentionally revised.
+Every milestone document should state its status, dependencies, scope, deliverables, acceptance criteria,
+security requirements, test plan, observability, rollback strategy, and definition of done. Milestone
+numbers are implementation dependencies and are not the same thing as sprint numbers in the
+implementation plan.
 
 ## Status Language
 

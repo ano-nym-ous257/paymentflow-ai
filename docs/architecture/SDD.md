@@ -1043,25 +1043,25 @@ If High -> Hold payment, create case in Fraud Center, notify Admin
 
 ### Phase 1: Core Platform (0–6 months)
 **Goals**
-- Core microservices: Auth, User, Wallet (single currency), Ledger, Transaction, Notification.
-- API Gateway, basic mobile/web clients, CI/CD, infra baseline.
-- Basic KYC integration and audit logging.
+- Engineering foundation, Auth, User, Ledger, and early wallet-readiness foundations.
+- API Gateway, local and cloud deployment baseline, CI/CD, infra skeleton, and audit logging.
+- Identity, authorization, and ledger-first financial integrity before wallet or payment features.
 
 **Milestones**
-- M1: Infra & CI/CD baseline (Terraform, K8s, Vault).
-- M2: Auth + User + Wallet + Ledger MVP.
-- M3: Mobile app basic flows (signup, view balance, send internal transfers).
-- M4: Audit & observability.
+- M0: Foundation — monorepo, local development, CI/CD, infrastructure skeleton, shared packages.
+- M1: Authentication and Identity — Auth Service, User Service, sessions, MFA, RBAC, identity audit.
+- M2: Ledger Engine — chart of accounts, journal entries, posting engine, balances, reconciliation.
+- M3: Wallet Service — ledger-backed wallet accounts, balance views, wallet lifecycle.
 
 ### Phase 2: Payments & Wallets (6–12 months)
 **Goals**
-- Multi-currency wallets, Payment Service, Beneficiary Service, external provider adapters.
+- Payment Service, Transaction Service, Beneficiary Service, multi-currency wallet workflows, external provider adapters.
 - Event bus (Kafka), reconciliation pipelines.
 
 **Milestones**
-- M5: Payment orchestration + idempotency.
-- M6: External provider integration (1–2 corridors).
-- M7: Reconciliation and settlement automation.
+- M4: Payment orchestration + idempotency.
+- M5: External provider integration and FX foundations.
+- M6: Reconciliation and settlement automation.
 
 ### Phase 3: Business Features (12–18 months)
 **Goals**
@@ -1069,9 +1069,9 @@ If High -> Hold payment, create case in Fraud Center, notify Admin
 - Admin Portal with KYC/KYB workflows.
 
 **Milestones**
-- M8: Invoice & payment link flows.
-- M9: Payroll engine MVP.
-- M10: Admin workflows for KYC/KYB.
+- M7: Invoice & payment link flows.
+- M8: Payroll engine MVP.
+- M9: Admin workflows for KYC/KYB.
 
 ### Phase 4: AI Platform (18–30 months)
 **Goals**
@@ -1079,27 +1079,27 @@ If High -> Hold payment, create case in Fraud Center, notify Admin
 - Model governance and explainability.
 
 **Milestones**
-- M11: Feature store + model training pipelines.
-- M12: Copilot beta for consumer insights.
-- M13: Fraud model productionization.
+- M10: Feature store + model training pipelines.
+- M11: Copilot beta for consumer insights.
+- M12: Fraud model productionization.
 
 ### Phase 5: Treasury & Routing (24–36 months)
 **Goals**
 - Treasury Service, smart routing, multi-provider orchestration, FX optimization.
 
 **Milestones**
-- M14: Routing Service + provider metrics.
-- M15: Treasury forecasting & automated sweeps.
-- M16: FX hedging recommendations.
+- M13: Routing Service + provider metrics.
+- M14: Treasury forecasting & automated sweeps.
+- M15: FX hedging recommendations.
 
 ### Phase 6: Global Scale (36–60 months)
 **Goals**
 - Multi-region active-active, regulatory expansions, PCI/ISO certifications, enterprise features.
 
 **Milestones**
-- M17: Multi-region deployment and data residency controls.
-- M18: PCI DSS and SOC2 compliance.
-- M19: Enterprise onboarding and SLA contracts.
+- M16: Multi-region deployment and data residency controls.
+- M17: PCI DSS and SOC2 compliance.
+- M18: Enterprise onboarding and SLA contracts.
 
 ---
 

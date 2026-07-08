@@ -47,7 +47,7 @@ This plan converts the approved architecture and product requirements into a pha
 - **Blocking rules:** ledger and wallet must be stable before external rails integration.
 
 ### Why this order
-- **Foundation first** (auth, infra, CI) enables secure, repeatable delivery.
+- **Foundation first** (repo, infra, CI, local development, security scanning) enables secure, repeatable delivery before authentication and financial services are implemented.
 - **Ledger & Wallet early** because financial integrity is core and other features depend on them.
 - **Payments & routing** after ledger/wallet to enable rails integration.
 - **AI, fraud, treasury** layered after transactional data exists for model training and feature extraction.
@@ -113,7 +113,7 @@ For each epic: objectives, business value, technical goals, dependencies, delive
 **Objectives:** Banking‑grade ledger, double‑entry, immutability.
 **Business value:** Financial integrity and auditability.
 **Technical goals:** Ledger service, journal entries, hash chaining, atomic commits, reconciliation.
-**Dependencies:** Wallet, Transaction.
+**Dependencies:** Foundation, Auth, User.
 **Deliverables:** Ledger APIs, journal tables, reconciliation jobs, audit logs.
 **DoD:** ACID transactions, audit trail, integrity checks pass.
 
@@ -319,7 +319,7 @@ Below are representative features for key epics. Each feature includes descripti
 **Feature: Journal Entry Posting**
 - **Description:** Create atomic journal with lines, update balances snapshot, publish event.
 - **Priority:** P0
-- **Dependencies:** Wallet, Transaction.
+- **Dependencies:** Foundation, Auth, User.
 - **Complexity:** High
 - **Estimated effort:** 21–34 points
 - **Acceptance criteria:** Journals are ACID, sum(debits) == sum(credits) in base currency, hash chain maintained, event emitted.
