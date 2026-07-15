@@ -63,6 +63,39 @@ The aesthetic combines premium dark fintech, enterprise SaaS density, glassmorph
 
 Start with [`docs/README.md`](docs/README.md) for the complete document order and status of each milestone.
 
+## Development
+
+### Prerequisites
+
+- Node.js >= 20
+- pnpm >= 9
+
+### Setup
+
+```bash
+pnpm install
+```
+
+### Commands
+
+| Command | Purpose |
+|---------|---------|
+| `pnpm lint` | Run ESLint |
+| `pnpm typecheck` | Run TypeScript compiler check |
+| `pnpm test` | Run Vitest test suite |
+| `pnpm format` | Format code with Prettier |
+| `pnpm format:check` | Check formatting without writing |
+
+### Commit Convention
+
+This project uses [Conventional Commits](https://www.conventionalcommits.org/) enforced by commitlint and Husky.
+
+```bash
+git commit -m "feat(ui): add PaymentCard component"
+```
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for full development workflow.
+
 ## Repository Structure
 
 ```text
