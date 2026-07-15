@@ -43,7 +43,11 @@ describe('Button', () => {
   });
 
   it('spreads additional HTML attributes', () => {
-    render(<Button disabled aria-label="close">X</Button>);
+    render(
+      <Button disabled aria-label="close">
+        X
+      </Button>,
+    );
     const button = screen.getByRole('button');
     expect(button.hasAttribute('disabled')).toBe(true);
     expect(button.getAttribute('aria-label')).toBe('close');

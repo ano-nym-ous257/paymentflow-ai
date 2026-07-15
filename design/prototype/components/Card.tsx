@@ -5,11 +5,7 @@ export interface CardProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
 }
 
-export default function Card({
-  children,
-  className = '',
-  ...rest
-}: CardProps) {
+export default function Card({ children, className = '', ...rest }: CardProps) {
   return (
     <div className={`card--glass card--elevated ${className}`.trim()} {...rest}>
       {children}

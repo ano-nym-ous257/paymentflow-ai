@@ -23,11 +23,7 @@ export default function Button({
   ...rest
 }: ButtonProps) {
   return (
-    <button
-      type={type}
-      className={`btn ${VARIANT_CLASS[variant]} ${className}`.trim()}
-      {...rest}
-    >
+    <button type={type} className={`btn ${VARIANT_CLASS[variant]} ${className}`.trim()} {...rest}>
       {children}
     </button>
   );

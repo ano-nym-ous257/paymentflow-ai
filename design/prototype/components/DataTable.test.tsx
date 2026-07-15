@@ -26,13 +26,7 @@ describe('DataTable', () => {
   });
 
   it('uses role="table" with accessible label', () => {
-    render(
-      <DataTable
-        columns={sampleColumns}
-        rows={sampleRows}
-        ariaLabel="Users"
-      />,
-    );
+    render(<DataTable columns={sampleColumns} rows={sampleRows} ariaLabel="Users" />);
     expect(screen.getByRole('table', { name: 'Users' })).toBeDefined();
   });
 
