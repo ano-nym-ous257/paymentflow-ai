@@ -28,11 +28,7 @@ export default function DataTable({
   className = '',
 }: DataTableProps) {
   return (
-    <div
-      className={`data-table ${className}`.trim()}
-      role="table"
-      aria-label={ariaLabel}
-    >
+    <div className={`data-table ${className}`.trim()} role="table" aria-label={ariaLabel}>
       <div role="rowgroup">
         <div role="row" className="table-header">
           {columns.map((column) => (

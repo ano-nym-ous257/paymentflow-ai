@@ -31,5 +31,5 @@ module.exports = {
     '@typescript-eslint/explicit-function-return-type': 'off',
     'no-console': ['warn', { allow: ['warn', 'error'] }],
   },
-  ignorePatterns: ['node_modules/', 'dist/', '*.js', '!.eslintrc.js'],
+  ignorePatterns: ['node_modules/', 'dist/', 'design/', '*.js', '!.eslintrc.js'],
 };

@@ -4,7 +4,11 @@ import Card from './Card';
 
 describe('Card', () => {
   it('renders children', () => {
-    render(<Card><p>Card content</p></Card>);
+    render(
+      <Card>
+        <p>Card content</p>
+      </Card>,
+    );
     expect(screen.getByText('Card content')).toBeDefined();
   });
 
@@ -22,7 +26,11 @@ describe('Card', () => {
   });
 
   it('spreads additional HTML attributes', () => {
-    render(<Card data-testid="my-card" role="region">Content</Card>);
+    render(
+      <Card data-testid="my-card" role="region">
+        Content
+      </Card>,
+    );
     expect(screen.getByTestId('my-card')).toBeDefined();
     expect(screen.getByRole('region')).toBeDefined();
   });

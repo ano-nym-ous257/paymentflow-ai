@@ -1,17 +1,39 @@
-PaymentFlow AI — Design folder
+# PaymentFlow AI — Design Archive
 
-This folder contains starter artifacts to help frontend teams adopt the PaymentFlow AI design system.
+This directory contains the original prototype and design artifacts for PaymentFlow AI.
 
-Files:
-- design-tokens.scss — a pointer that identifies [`../design-tokens.json`](../design-tokens.json) as the canonical token source. It intentionally does not duplicate token values.
-- components/
-  - Button.jsx — React starter for primary/ghost/danger variants.
-  - Card.jsx — simple card wrapper using CSS variables and utility classes.
-  - DataTable.jsx — lightweight data table shell with support for columns and rows.
+## Purpose
 
-Usage:
-1. Generate framework-specific tokens from [`../design-tokens.json`](../design-tokens.json) during the future build setup.
-2. Use [`../styles.css`](../styles.css) directly when running the dependency-free prototype.
-3. Use the components as examples and adapt them into the future component library.
+These files served as the high-fidelity design exploration during the initial product phase. They established the visual language, interaction patterns, and component API surface that informed the production component library.
 
-This is a minimal starter — for production, wire up build tooling and tests.
+## Status
+
+**This is not production code.**
+
+The production component library lives at `packages/ui/`. All future applications should consume components exclusively from that package.
+
+## Contents
+
+- `prototype/` — Complete prototype application (HTML, CSS, JS, design tokens)
+- `prototype/components/` — Original component starters (JSX + TypeScript explorations)
+- `prototype/styles/` — CSS partials from the prototype phase
+- `prototype/backups/` — Historical backup snapshots
+
+## Why This Exists
+
+Prototype artifacts are preserved for:
+
+1. Historical reference — understanding original design intent
+2. Visual documentation — the prototype can still be opened in a browser
+3. Onboarding — new team members can see how the design evolved
+
+## Engineering Boundary
+
+Files in this directory are excluded from:
+
+- TypeScript compilation
+- ESLint linting
+- Build pipelines
+- Package validation
+
+They are inert reference material only.
