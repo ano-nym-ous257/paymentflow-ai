@@ -1,0 +1,97 @@
+:root {
+  --color-brand-navy: #0a1628;
+  --color-brand-blue: #1e40af;
+  --color-brand-cyan: #06b6d4;
+  --color-brand-white: #f8fafc;
+  --color-surface: #111827;
+  --color-surface-elevated: #1f2937;
+  --color-border: #374151;
+  --color-text-primary: #f8fafc;
+  --color-text-secondary: #9ca3af;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-brand-navy);
+  color: var(--color-text-primary);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.btn--primary {
+  background-color: var(--color-brand-blue);
+  color: var(--color-brand-white);
+  border-color: var(--color-brand-blue);
+}
+
+.btn--primary:hover {
+  background-color: #1d4ed8;
+}
+
+.btn--ghost {
+  background-color: transparent;
+  color: var(--color-text-primary);
+  border-color: var(--color-border);
+}
+
+.btn--ghost:hover {
+  background-color: var(--color-surface-elevated);
+}
+
+.btn--danger {
+  background-color: #dc2626;
+  color: var(--color-brand-white);
+  border-color: #dc2626;
+}
+
+.btn--danger:hover {
+  background-color: #b91c1c;
+}
+
+.card--glass {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+}
+
+.card--elevated {
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.2);
+}

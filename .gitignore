@@ -36,3 +36,7 @@ backups/
 
 # Turbo
 .turbo/
+
+# Next.js
+.next/
+*.tsbuildinfo
