@@ -53,6 +53,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@paymentflow/mock-data':
+        specifier: workspace:*
+        version: link:../../packages/mock-data
       '@paymentflow/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -80,6 +83,16 @@ importers:
         version: 5.9.3
 
   packages/domain:
+    devDependencies:
+      typescript:
+        specifier: ^5.4.0
+        version: 5.9.3
+
+  packages/mock-data:
+    dependencies:
+      '@paymentflow/shared-types':
+        specifier: workspace:*
+        version: link:../shared-types
     devDependencies:
       typescript:
         specifier: ^5.4.0
