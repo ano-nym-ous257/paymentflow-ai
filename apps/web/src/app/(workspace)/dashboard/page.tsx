@@ -68,6 +68,19 @@ function trendArrow(trend: 'up' | 'down' | 'stable'): string {
   return '→';
 }
 
+function trendModifier(trend: 'up' | 'down' | 'stable'): string {
+  if (trend === 'up') return 'dashboard__metric-trend--up';
+  if (trend === 'down') return 'dashboard__metric-trend--down';
+  return 'dashboard__metric-trend--neutral';
+}
+
+const QUICK_ACTIONS = [
+  { icon: '↗', label: 'Send Money' },
+  { icon: '↙', label: 'Receive' },
+  { icon: '⇄', label: 'Exchange' },
+  { icon: '+', label: 'Create Wallet' },
+] as const;
+
 export default function DashboardPage() {
   const recentTransactions = transactions.slice(0, 5);
   const topRates = exchangeRates.slice(0, 4);
@@ -79,15 +92,23 @@ export default function DashboardPage() {
       <Stack direction="vertical" gap="32px">
         {/* Hero Section */}
         <section aria-labelledby="hero-heading">
-          <Stack direction="vertical" gap="8px">
-            <h1 id="hero-heading" className="dashboard__heading">
-              Good morning, Michael
-            </h1>
-            <p className="dashboard__subheading">
-              Wednesday, July 16, 2026 — {dashboardSummary.pendingPayments} pending payments require
-              attention
-            </p>
-          </Stack>
+          <div className="dashboard__hero">
+            <div className="dashboard__hero-content">
+              <h1 id="hero-heading" className="dashboard__heading">
+                Good morning, Michael
+              </h1>
+              <p className="dashboard__subheading">
+                Wednesday, July 16, 2026 — {dashboardSummary.pendingPayments} pending payments
+                require attention
+              </p>
+            </div>
+            <div className="dashboard__hero-summary">
+              <span className="dashboard__portfolio-label">Total Portfolio (USD eq.)</span>
+              <span className="dashboard__portfolio-value">
+                ${dashboardSummary.totalBalanceUsd}
+              </span>
+            </div>
+          </div>
         </section>
 
         {/* Summary Metrics */}
@@ -96,27 +117,47 @@ export default function DashboardPage() {
             Account Metrics
           </h2>
           <Grid columns={4} gap="16px" minChildWidth="220px">
-            <Card>
-              <Stack direction="vertical" gap="4px">
-                <span className="dashboard__metric-label">Total Balance (USD eq.)</span>
+            <Card className="dashboard__metric-card">
+              <Stack direction="vertical" gap="12px">
+                <div className="dashboard__metric-header">
+                  <span className="dashboard__metric-label">Total Balance (USD eq.)</span>
+                  <span className="dashboard__metric-icon" aria-hidden="true">
+                    $
+                  </span>
+                </div>
                 <span className="dashboard__metric-value">${dashboardSummary.totalBalanceUsd}</span>
               </Stack>
             </Card>
-            <Card>
-              <Stack direction="vertical" gap="4px">
-                <span className="dashboard__metric-label">Monthly Volume</span>
+            <Card className="dashboard__metric-card">
+              <Stack direction="vertical" gap="12px">
+                <div className="dashboard__metric-header">
+                  <span className="dashboard__metric-label">Monthly Volume</span>
+                  <span className="dashboard__metric-icon" aria-hidden="true">
+                    ⇄
+                  </span>
+                </div>
                 <span className="dashboard__metric-value">${dashboardSummary.monthlyVolume}</span>
               </Stack>
             </Card>
-            <Card>
-              <Stack direction="vertical" gap="4px">
-                <span className="dashboard__metric-label">Active Wallets</span>
+            <Card className="dashboard__metric-card">
+              <Stack direction="vertical" gap="12px">
+                <div className="dashboard__metric-header">
+                  <span className="dashboard__metric-label">Active Wallets</span>
+                  <span className="dashboard__metric-icon" aria-hidden="true">
+                    ◇
+                  </span>
+                </div>
                 <span className="dashboard__metric-value">{dashboardSummary.activeWallets}</span>
               </Stack>
             </Card>
-            <Card>
-              <Stack direction="vertical" gap="4px">
-                <span className="dashboard__metric-label">Compliance Score</span>
+            <Card className="dashboard__metric-card">
+              <Stack direction="vertical" gap="12px">
+                <div className="dashboard__metric-header">
+                  <span className="dashboard__metric-label">Compliance Score</span>
+                  <span className="dashboard__metric-icon" aria-hidden="true">
+                    ✓
+                  </span>
+                </div>
                 <span className="dashboard__metric-value">{dashboardSummary.complianceScore}%</span>
               </Stack>
             </Card>
@@ -133,19 +174,26 @@ export default function DashboardPage() {
               {dashboardWallets.map((wallet) => (
                 <Card key={wallet.id}>
                   <Stack direction="vertical" gap="12px">
-                    <Stack direction="horizontal" gap="8px" align="center" justify="space-between">
-                      <span className="dashboard__wallet-name">{wallet.name}</span>
-                      <Badge variant={wallet.trend === 'down' ? 'danger' : 'success'}>
+                    <div className="dashboard__wallet-header">
+                      <Stack direction="horizontal" gap="8px" align="center">
+                        <span className="dashboard__wallet-currency" aria-hidden="true">
+                          {wallet.currency}
+                        </span>
+                        <span className="dashboard__wallet-name">{wallet.name}</span>
+                      </Stack>
+                      <span className={`dashboard__metric-trend ${trendModifier(wallet.trend)}`}>
                         {trendArrow(wallet.trend)} {wallet.trendPercent}%
-                      </Badge>
-                    </Stack>
+                      </span>
+                    </div>
                     <span className="dashboard__wallet-balance">
                       {formatCurrency(wallet.balance.amount, wallet.currency)}
                     </span>
                     {wallet.pendingBalance.amount !== '0.00' && (
-                      <span className="dashboard__wallet-pending">
-                        {formatCurrency(wallet.pendingBalance.amount, wallet.currency)} pending
-                      </span>
+                      <div className="dashboard__wallet-footer">
+                        <span className="dashboard__wallet-pending">
+                          {formatCurrency(wallet.pendingBalance.amount, wallet.currency)} pending
+                        </span>
+                      </div>
                     )}
                   </Stack>
                 </Card>
@@ -168,11 +216,23 @@ export default function DashboardPage() {
                     <div key={tx.id}>
                       {idx > 0 && <Divider />}
                       <div className="dashboard__tx-row">
-                        <Stack direction="vertical" gap="2px">
-                          <span className="dashboard__tx-description">{tx.description}</span>
-                          <span className="dashboard__tx-meta">
-                            {tx.counterparty} · {formatTime(tx.createdAt)}
+                        <Stack direction="horizontal" gap="12px" align="center">
+                          <span
+                            className={`dashboard__tx-icon ${
+                              tx.direction === 'inbound'
+                                ? 'dashboard__tx-icon--inbound'
+                                : 'dashboard__tx-icon--outbound'
+                            }`}
+                            aria-hidden="true"
+                          >
+                            {tx.direction === 'inbound' ? '↙' : '↗'}
                           </span>
+                          <Stack direction="vertical" gap="2px">
+                            <span className="dashboard__tx-description">{tx.description}</span>
+                            <span className="dashboard__tx-meta">
+                              {tx.counterparty} · {formatTime(tx.createdAt)}
+                            </span>
+                          </Stack>
                         </Stack>
                         <Stack direction="vertical" gap="2px" align="flex-end">
                           <span
@@ -211,14 +271,14 @@ export default function DashboardPage() {
                         <span className="dashboard__rate-pair">
                           {rate.baseCurrency}/{rate.quoteCurrency}
                         </span>
-                        <Stack direction="horizontal" gap="8px" align="center">
-                          <span className="dashboard__rate-value">{rate.rate}</span>
+                        <div className="dashboard__rate-value">
+                          <span>{rate.rate}</span>
                           <span
                             className={`dashboard__rate-change ${rate.trend === 'down' ? 'dashboard__rate-change--down' : 'dashboard__rate-change--up'}`}
                           >
                             {trendArrow(rate.trend)} {rate.changePercent}%
                           </span>
-                        </Stack>
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -278,10 +338,13 @@ export default function DashboardPage() {
                       <div
                         className={`dashboard__notif-row ${!notif.read ? 'dashboard__notif-row--unread' : ''}`}
                       >
-                        <Stack direction="vertical" gap="2px">
+                        {!notif.read && (
+                          <span className="dashboard__notif-dot" aria-hidden="true" />
+                        )}
+                        <div className="dashboard__notif-content">
                           <span className="dashboard__notif-title">{notif.title}</span>
                           <span className="dashboard__notif-message">{notif.message}</span>
-                        </Stack>
+                        </div>
                         <span className="dashboard__notif-time">{formatTime(notif.createdAt)}</span>
                       </div>
                     </div>
@@ -297,40 +360,16 @@ export default function DashboardPage() {
               <h2 id="actions-heading" className="dashboard__section-title">
                 Quick Actions
               </h2>
-              <Grid columns={2} gap="12px">
-                <Card>
-                  <Stack direction="vertical" gap="8px" align="center">
+              <div className="dashboard__actions">
+                {QUICK_ACTIONS.map((action) => (
+                  <button key={action.label} type="button" className="dashboard__action-card">
                     <span className="dashboard__action-icon" aria-hidden="true">
-                      ↗
+                      {action.icon}
                     </span>
-                    <span className="dashboard__action-label">Send Money</span>
-                  </Stack>
-                </Card>
-                <Card>
-                  <Stack direction="vertical" gap="8px" align="center">
-                    <span className="dashboard__action-icon" aria-hidden="true">
-                      ↙
-                    </span>
-                    <span className="dashboard__action-label">Receive</span>
-                  </Stack>
-                </Card>
-                <Card>
-                  <Stack direction="vertical" gap="8px" align="center">
-                    <span className="dashboard__action-icon" aria-hidden="true">
-                      ⇄
-                    </span>
-                    <span className="dashboard__action-label">Exchange</span>
-                  </Stack>
-                </Card>
-                <Card>
-                  <Stack direction="vertical" gap="8px" align="center">
-                    <span className="dashboard__action-icon" aria-hidden="true">
-                      +
-                    </span>
-                    <span className="dashboard__action-label">Create Wallet</span>
-                  </Stack>
-                </Card>
-              </Grid>
+                    <span className="dashboard__action-label">{action.label}</span>
+                  </button>
+                ))}
+              </div>
             </Stack>
           </aside>
         </div>
