@@ -202,7 +202,7 @@ export default function DashboardPage() {
           </Stack>
         </section>
 
-        {/* Two-column: Recent Activity + Exchange Rates */}
+        {/* Two-column: Recent Activity + Module Column (Exchange Rates, Quick Actions) */}
         <div className="dashboard__columns">
           {/* Recent Activity */}
           <section aria-labelledby="activity-heading" className="dashboard__column-main">
@@ -251,41 +251,68 @@ export default function DashboardPage() {
             </Stack>
           </section>
 
-          {/* Exchange Rates */}
-          <aside aria-labelledby="rates-heading" className="dashboard__column-aside">
-            <Stack direction="vertical" gap="16px">
-              <Stack direction="horizontal" gap="8px" align="center">
-                <h2 id="rates-heading" className="dashboard__section-title">
-                  Exchange Rates
-                </h2>
-                <span className="dashboard__live-indicator" aria-label="Live rates">
-                  ●
-                </span>
-              </Stack>
-              <Card>
-                <Stack direction="vertical" gap="0px">
-                  {topRates.map((rate, idx) => (
-                    <div key={rate.id}>
-                      {idx > 0 && <Divider />}
-                      <div className="dashboard__rate-row">
-                        <span className="dashboard__rate-pair">
-                          {rate.baseCurrency}/{rate.quoteCurrency}
-                        </span>
-                        <div className="dashboard__rate-value">
-                          <span>{rate.rate}</span>
-                          <span
-                            className={`dashboard__rate-change ${rate.trend === 'down' ? 'dashboard__rate-change--down' : 'dashboard__rate-change--up'}`}
-                          >
-                            {trendArrow(rate.trend)} {rate.changePercent}%
+          {/* Module Column — stackable modules for the aside */}
+          <div className="dashboard__column-aside dashboard__module-column">
+            {/* Exchange Rates */}
+            <aside aria-labelledby="rates-heading">
+              <Stack direction="vertical" gap="16px">
+                <Stack direction="horizontal" gap="8px" align="center">
+                  <h2 id="rates-heading" className="dashboard__section-title">
+                    Exchange Rates
+                  </h2>
+                  <span className="dashboard__live-indicator" aria-label="Live rates">
+                    ●
+                  </span>
+                </Stack>
+                <Card>
+                  <Stack direction="vertical" gap="0px">
+                    {topRates.map((rate, idx) => (
+                      <div key={rate.id}>
+                        {idx > 0 && <Divider />}
+                        <div className="dashboard__rate-row">
+                          <span className="dashboard__rate-pair">
+                            {rate.baseCurrency}/{rate.quoteCurrency}
                           </span>
+                          <div className="dashboard__rate-value">
+                            <span>{rate.rate}</span>
+                            <span
+                              className={`dashboard__rate-change ${rate.trend === 'down' ? 'dashboard__rate-change--down' : 'dashboard__rate-change--up'}`}
+                            >
+                              {trendArrow(rate.trend)} {rate.changePercent}%
+                            </span>
+                          </div>
                         </div>
                       </div>
-                    </div>
+                    ))}
+                  </Stack>
+                </Card>
+              </Stack>
+            </aside>
+
+            {/* Quick Actions */}
+            <section aria-labelledby="actions-heading">
+              <Stack direction="vertical" gap="16px">
+                <h2 id="actions-heading" className="dashboard__section-title">
+                  Quick Actions
+                </h2>
+                <div className="dashboard__actions">
+                  {QUICK_ACTIONS.map((action) => (
+                    <button
+                      key={action.label}
+                      type="button"
+                      className="dashboard__action-card"
+                      aria-label={action.label}
+                    >
+                      <span className="dashboard__action-icon" aria-hidden="true">
+                        {action.icon}
+                      </span>
+                      <span className="dashboard__action-label">{action.label}</span>
+                    </button>
                   ))}
-                </Stack>
-              </Card>
-            </Stack>
-          </aside>
+                </div>
+              </Stack>
+            </section>
+          </div>
         </div>
 
         {/* Pending Payments */}
@@ -317,62 +344,41 @@ export default function DashboardPage() {
           </Stack>
         </section>
 
-        {/* Two-column: Notifications + Quick Actions */}
-        <div className="dashboard__columns">
-          {/* Notifications */}
-          <section aria-labelledby="notifications-heading" className="dashboard__column-main">
-            <Stack direction="vertical" gap="16px">
-              <h2 id="notifications-heading" className="dashboard__section-title">
-                Notifications
-                {unreadNotifications.length > 0 && (
-                  <span className="dashboard__notification-count">
-                    {unreadNotifications.length}
-                  </span>
-                )}
-              </h2>
-              <Card>
-                <Stack direction="vertical" gap="0px">
-                  {notifications.slice(0, 5).map((notif, idx) => (
-                    <div key={notif.id}>
-                      {idx > 0 && <Divider />}
-                      <div
-                        className={`dashboard__notif-row ${!notif.read ? 'dashboard__notif-row--unread' : ''}`}
-                      >
-                        {!notif.read && (
+        {/* Notifications */}
+        <section aria-labelledby="notifications-heading">
+          <Stack direction="vertical" gap="16px">
+            <h2 id="notifications-heading" className="dashboard__section-title">
+              Notifications
+              {unreadNotifications.length > 0 && (
+                <span className="dashboard__notification-count">{unreadNotifications.length}</span>
+              )}
+            </h2>
+            <Card>
+              <Stack direction="vertical" gap="0px">
+                {notifications.slice(0, 5).map((notif, idx) => (
+                  <div key={notif.id}>
+                    {idx > 0 && <Divider />}
+                    <div
+                      className={`dashboard__notif-row ${!notif.read ? 'dashboard__notif-row--unread' : ''}`}
+                    >
+                      {!notif.read && (
+                        <>
                           <span className="dashboard__notif-dot" aria-hidden="true" />
-                        )}
-                        <div className="dashboard__notif-content">
-                          <span className="dashboard__notif-title">{notif.title}</span>
-                          <span className="dashboard__notif-message">{notif.message}</span>
-                        </div>
-                        <span className="dashboard__notif-time">{formatTime(notif.createdAt)}</span>
+                          <span className="sr-only">Unread</span>
+                        </>
+                      )}
+                      <div className="dashboard__notif-content">
+                        <span className="dashboard__notif-title">{notif.title}</span>
+                        <span className="dashboard__notif-message">{notif.message}</span>
                       </div>
+                      <span className="dashboard__notif-time">{formatTime(notif.createdAt)}</span>
                     </div>
-                  ))}
-                </Stack>
-              </Card>
-            </Stack>
-          </section>
-
-          {/* Quick Actions */}
-          <aside aria-labelledby="actions-heading" className="dashboard__column-aside">
-            <Stack direction="vertical" gap="16px">
-              <h2 id="actions-heading" className="dashboard__section-title">
-                Quick Actions
-              </h2>
-              <div className="dashboard__actions">
-                {QUICK_ACTIONS.map((action) => (
-                  <button key={action.label} type="button" className="dashboard__action-card">
-                    <span className="dashboard__action-icon" aria-hidden="true">
-                      {action.icon}
-                    </span>
-                    <span className="dashboard__action-label">{action.label}</span>
-                  </button>
+                  </div>
                 ))}
-              </div>
-            </Stack>
-          </aside>
-        </div>
+              </Stack>
+            </Card>
+          </Stack>
+        </section>
       </Stack>
     </PageContainer>
   );
