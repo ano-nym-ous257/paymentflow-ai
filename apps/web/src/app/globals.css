@@ -587,6 +587,8 @@ body::after {
 
 .btn--glow {
   box-shadow: var(--shadow-xs);
+  isolation: isolate;
+  overflow: visible;
 }
 
 .btn--glow::before {
@@ -596,10 +598,17 @@ body::after {
   border-radius: inherit;
   background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(6, 182, 212, 0.3));
   opacity: 0;
-  z-index: -1;
+  z-index: 0;
   filter: blur(8px);
   transition: opacity var(--duration-normal) var(--ease-default);
   pointer-events: none;
+}
+
+.btn--glow .btn__label,
+.btn--glow .btn__icon,
+.btn--glow .btn__spinner {
+  position: relative;
+  z-index: 1;
 }
 
 .btn--glow:hover::before {
@@ -617,8 +626,8 @@ body::after {
    ---------------------------------------- */
 
 .btn--lift:hover {
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
 }
 
 .btn--lift:active {
