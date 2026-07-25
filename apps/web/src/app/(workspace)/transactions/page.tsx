@@ -1,3 +1,5 @@
+'use client';
+
 import { Card } from '@paymentflow/ui';
 import { PageContainer } from '@/components/PageContainer';
 

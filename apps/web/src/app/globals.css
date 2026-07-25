@@ -2074,43 +2074,540 @@ body::after {
 
 .auth-layout {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   min-height: 100vh;
-  padding: var(--space-6);
+  padding: 0;
   background: var(--bg-base);
+  overflow: hidden;
 }
 
-.auth-page {
+.auth-layout__container {
   width: 100%;
-  max-width: 420px;
+  max-width: 460px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.auth-card {
-  padding: var(--space-8);
+/* ========================================
+   Lamplight — Root
+   ======================================== */
+
+.lamplight {
+  --lamp-glow-color: rgba(59, 130, 246, 0.35);
+  --lamp-bulb-off: var(--text-muted);
+  --lamp-bulb-on: var(--accent);
+  --lamp-cord-color: var(--border-strong);
+  --lamp-handle-bg: var(--surface-elevated);
+  --lamp-handle-border: var(--border-default);
+  --lamp-panel-bg: var(--surface);
+  --lamp-panel-border: var(--border-subtle);
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 460px;
+  isolation: isolate;
 }
 
-.auth-header {
-  text-align: center;
+/* ========================================
+   Lamplight — Fixture (Lamp Construction)
+   ======================================== */
+
+.lamplight__fixture {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: var(--z-raised);
 }
 
-.auth-title {
-  font-size: var(--text-xl);
-  font-weight: 600;
+.lamplight__mount {
+  width: 48px;
+  height: 8px;
+  background: var(--surface-solid);
+  border-radius: var(--radius-xs) var(--radius-xs) 0 0;
+}
+
+.lamplight__shade {
+  width: 80px;
+  height: 36px;
+  background: linear-gradient(180deg, var(--surface-solid) 0%, var(--bg-canvas) 100%);
+  clip-path: polygon(15% 0%, 85% 0%, 100% 100%, 0% 100%);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  position: relative;
+}
+
+.lamplight__bulb {
+  width: 12px;
+  height: 12px;
+  border-radius: var(--radius-full);
+  background: var(--lamp-bulb-off);
+  margin-bottom: 4px;
+  transition: background var(--duration-normal) var(--ease-default),
+    box-shadow var(--duration-slow) var(--ease-default);
+}
+
+.lamplight__bulb--on {
+  background: var(--lamp-bulb-on);
+  box-shadow: 0 0 12px var(--lamp-glow-color), 0 0 24px var(--lamp-glow-color);
+}
+
+/* ========================================
+   Lamplight — Beam
+   ======================================== */
+
+.lamplight__beam {
+  width: 0;
+  height: 0;
+  opacity: 0;
+  transition: opacity var(--duration-slow) var(--ease-default),
+    width var(--duration-slow) var(--ease-default),
+    height var(--duration-slow) var(--ease-default);
+  background: linear-gradient(
+    180deg,
+    var(--lamp-glow-color) 0%,
+    rgba(59, 130, 246, 0.08) 60%,
+    transparent 100%
+  );
+  pointer-events: none;
+  position: absolute;
+  top: 44px;
+  left: 50%;
+  transform: translateX(-50%);
+  clip-path: polygon(30% 0%, 70% 0%, 100% 100%, 0% 100%);
+  z-index: -1;
+}
+
+.lamplight__beam--on {
+  width: 320px;
+  height: 400px;
+  opacity: 1;
+}
+
+/* ========================================
+   Lamplight — Cord and Handle
+   ======================================== */
+
+.lamplight__cord-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.lamplight__cord {
+  width: 2px;
+  height: 40px;
+  background: var(--lamp-cord-color);
+  transition: height var(--duration-normal) var(--ease-spring);
+}
+
+.lamplight__cord--pulling {
+  height: 56px;
+}
+
+.lamplight__handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: var(--lamp-handle-bg);
+  border: 1px solid var(--lamp-handle-border);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: transform var(--duration-normal) var(--ease-spring),
+    box-shadow var(--duration-fast) var(--ease-default);
+  padding: 0;
+}
+
+.lamplight__handle:hover {
+  box-shadow: 0 0 8px var(--lamp-glow-color);
+}
+
+.lamplight__handle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.lamplight__handle--pulling {
+  transform: translateY(16px);
+}
+
+.lamplight__handle-knob {
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-full);
+  background: var(--accent);
+  display: block;
+}
+
+/* ========================================
+   Lamplight — Panel (Collapsed / Expanded)
+   ======================================== */
+
+.lamplight__panel {
+  width: 100%;
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--duration-entrance) var(--ease-default);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  margin-top: var(--space-4);
+}
+
+.lamplight__panel--open {
+  grid-template-rows: 1fr;
+}
+
+.lamplight__panel-content {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.lamplight__panel-header {
+  display: flex;
+  justify-content: flex-end;
+  padding: var(--space-3) var(--space-4) 0;
+}
+
+.lamplight__close-btn {
+  color: var(--text-muted);
+  transition: color var(--duration-fast) var(--ease-default);
+}
+
+.lamplight__close-btn:hover {
   color: var(--text-primary);
-  margin: 0 0 var(--space-2) 0;
 }
 
-.auth-subtitle {
-  font-size: var(--text-sm);
+/* ========================================
+   Lamplight — Capsule (Collapsed State)
+   ======================================== */
+
+.lamplight__capsule {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  padding: 0 var(--space-6);
+  background: var(--lamp-panel-bg);
+  border: 1px solid var(--lamp-panel-border);
+  border-radius: var(--radius-full);
+  backdrop-filter: blur(12px);
+  margin: var(--space-3) var(--space-4);
+  opacity: 1;
+  transition: opacity var(--duration-normal) var(--ease-default),
+    transform var(--duration-normal) var(--ease-default);
+}
+
+.lamplight__capsule[data-visible] {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.lamplight__capsule:not([data-visible]) {
+  opacity: 0;
+  transform: scale(0.95);
+  height: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.lamplight__capsule-text {
+  font-size: var(--text-body-sm);
+  font-weight: var(--weight-medium);
   color: var(--text-secondary);
+  letter-spacing: var(--tracking-wider);
+  text-transform: uppercase;
+}
+
+/* ========================================
+   Lamplight — Form Container and Transitions
+   ======================================== */
+
+.lamplight__form-container {
+  padding: 0 var(--space-6) var(--space-6);
+  animation: lamplight-form-enter var(--duration-entrance) var(--ease-default) both;
+}
+
+.lamplight__form-container[data-direction='forward'] {
+  animation-name: lamplight-form-enter-forward;
+}
+
+.lamplight__form-container[data-direction='backward'] {
+  animation-name: lamplight-form-enter-backward;
+}
+
+@keyframes lamplight-form-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes lamplight-form-enter-forward {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes lamplight-form-enter-backward {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ========================================
+   Lamplight — Form Styling
+   ======================================== */
+
+.lamplight__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.lamplight__form-title {
+  font-size: var(--text-h2);
+  font-weight: var(--weight-semibold);
+  color: var(--text-primary);
+  margin: 0;
+  line-height: var(--leading-tight);
+}
+
+.lamplight__form-subtitle {
+  font-size: var(--text-body-sm);
+  color: var(--text-secondary);
+  margin: calc(-1 * var(--space-2)) 0 0;
+}
+
+.lamplight__form-fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.lamplight__form-alert {
   margin: 0;
 }
 
-.auth-form {
-  width: 100%;
+.lamplight__form-hint {
+  font-size: var(--text-caption);
+  color: var(--text-muted);
+  text-align: center;
+  margin: 0;
 }
 
-.auth-footer {
-  text-align: center;
+/* ========================================
+   Password Field
+   ======================================== */
+
+.input-field__password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-field__input--password {
+  padding-right: 44px;
+}
+
+.input-field__password-toggle {
+  position: absolute;
+  right: var(--space-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color var(--duration-fast) var(--ease-default);
+}
+
+.input-field__password-toggle:hover {
+  color: var(--text-primary);
+}
+
+.input-field__password-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ========================================
+   Checkbox Field
+   ======================================== */
+
+.checkbox-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.checkbox-field__label {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  cursor: pointer;
+  font-size: var(--text-body-sm);
+  color: var(--text-secondary);
+  line-height: var(--leading-normal);
+}
+
+.checkbox-field__input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.checkbox-field__check {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid var(--border-strong);
+  border-radius: var(--radius-xs);
+  background: transparent;
+  margin-top: 1px;
+  transition: background var(--duration-fast) var(--ease-default),
+    border-color var(--duration-fast) var(--ease-default);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.checkbox-field__input:checked + .checkbox-field__check {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.checkbox-field__input:checked + .checkbox-field__check::after {
+  content: '';
+  display: block;
+  width: 5px;
+  height: 9px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg) translate(-1px, -1px);
+}
+
+.checkbox-field__input:focus-visible + .checkbox-field__check {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.checkbox-field__text {
+  flex: 1;
+}
+
+.checkbox-field__error {
+  font-size: var(--text-caption);
+  color: var(--danger);
+  margin: 0;
+  padding-left: 26px;
+}
+
+.checkbox-field--error .checkbox-field__check {
+  border-color: var(--danger);
+}
+
+/* ========================================
+   Icon Button
+   ======================================== */
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease-default),
+    color var(--duration-fast) var(--ease-default);
+}
+
+.icon-btn:hover {
+  background: var(--surface-elevated);
+  color: var(--text-primary);
+}
+
+.icon-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.icon-btn--sm {
+  width: 28px;
+  height: 28px;
+}
+
+.icon-btn--lg {
+  width: 44px;
+  height: 44px;
+}
+
+/* ========================================
+   Reduced Motion
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .lamplight__bulb,
+  .lamplight__beam,
+  .lamplight__cord,
+  .lamplight__handle,
+  .lamplight__panel,
+  .lamplight__capsule,
+  .lamplight__form-container {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+/* ========================================
+   Mobile — Lamplight
+   ======================================== */
+
+@media (max-width: 480px) {
+  .lamplight {
+    max-width: 100%;
+    padding: 0 var(--space-3);
+  }
+
+  .lamplight__form-container {
+    padding: 0 var(--space-4) var(--space-4);
+  }
+
+  .lamplight__shade {
+    width: 64px;
+    height: 28px;
+  }
 }

@@ -36,3 +36,9 @@ export type { AlertProps, AlertVariant } from './Alert';
 
 export { Skeleton } from './Skeleton';
 export type { SkeletonProps } from './Skeleton';
+
+export { Checkbox } from './Checkbox';
+export type { CheckboxProps } from './Checkbox';
+
+export { IconButton } from './IconButton';
+export type { IconButtonProps, IconButtonSize } from './IconButton';
