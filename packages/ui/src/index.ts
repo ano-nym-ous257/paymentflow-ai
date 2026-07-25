@@ -8,7 +8,7 @@ export * from './tokens';
 export * from './layout';
 
 export { Button } from './Button';
-export type { ButtonProps, ButtonVariant } from './Button';
+export type { ButtonProps, ButtonVariant, ButtonSize, ButtonInteraction } from './Button';
 
 export { Card } from './Card';
 export type { CardProps } from './Card';

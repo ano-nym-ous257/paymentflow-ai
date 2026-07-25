@@ -1226,7 +1226,7 @@ body::after {
 
 .dashboard__wallet-pending {
   font-size: var(--text-caption);
-  color: var(--text-muted);
+  color: var(--text-secondary);
 }
 
 /* ========================================
@@ -1255,6 +1255,12 @@ body::after {
 
 .dashboard__column-aside {
   min-width: 0;
+}
+
+.dashboard__module-column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
 }
 
 /* ========================================
@@ -1357,7 +1363,7 @@ body::after {
 
 .dashboard__tx-meta {
   font-size: var(--text-caption);
-  color: var(--text-muted);
+  color: var(--text-secondary);
 }
 
 .dashboard__tx-amount {
@@ -1487,7 +1493,7 @@ body::after {
 
 .dashboard__payment-meta {
   font-size: var(--text-caption);
-  color: var(--text-muted);
+  color: var(--text-secondary);
 }
 
 /* ========================================
@@ -1522,6 +1528,11 @@ body::after {
   border-color: var(--border-strong);
   box-shadow: var(--shadow-md);
   transform: translateY(-2px);
+}
+
+.dashboard__action-card:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
 }
 
 .dashboard__action-card:active {
@@ -1593,12 +1604,13 @@ body::after {
 
 .dashboard__notif-time {
   font-size: var(--text-micro);
-  color: var(--text-muted);
+  color: var(--text-secondary);
   white-space: nowrap;
 }
 
 .dashboard__notif-row--unread {
   background-color: var(--accent-subtle);
+  border-left: 3px solid var(--accent);
   padding: var(--space-3);
   margin: 0 calc(-1 * var(--space-3));
 }
