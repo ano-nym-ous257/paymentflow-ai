@@ -1,4 +1,10 @@
-import type { ButtonHTMLAttributes, ReactNode } from 'react';
+import {
+  useRef,
+  useCallback,
+  type ButtonHTMLAttributes,
+  type ReactNode,
+  type PointerEvent,
+} from 'react';
 import { Spinner } from './Spinner';
 
 export type ButtonVariant =
@@ -60,6 +66,32 @@ export function Button({
   ...rest
 }: ButtonProps) {
   const isDisabled = disabled || loading;
+  const btnRef = useRef<HTMLButtonElement>(null);
+
+  const isMagnetic = interaction === 'magnetic';
+
+  const handlePointerMove = useCallback((e: PointerEvent<HTMLButtonElement>) => {
+    const el = btnRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const offsetX = e.clientX - (rect.left + rect.width / 2);
+    const offsetY = e.clientY - (rect.top + rect.height / 2);
+    const strength = 0.3;
+    const iconStrength = 0.5;
+    el.style.setProperty('--magnetic-x', `${offsetX * strength}px`);
+    el.style.setProperty('--magnetic-y', `${offsetY * strength}px`);
+    el.style.setProperty('--magnetic-icon-x', `${offsetX * iconStrength}px`);
+    el.style.setProperty('--magnetic-icon-y', `${offsetY * iconStrength}px`);
+  }, []);
+
+  const handlePointerLeave = useCallback(() => {
+    const el = btnRef.current;
+    if (!el) return;
+    el.style.setProperty('--magnetic-x', '0px');
+    el.style.setProperty('--magnetic-y', '0px');
+    el.style.setProperty('--magnetic-icon-x', '0px');
+    el.style.setProperty('--magnetic-icon-y', '0px');
+  }, []);
 
   const classes = [
     'btn',
@@ -75,11 +107,14 @@ export function Button({
 
   return (
     <button
+      ref={btnRef}
       type={type}
       className={classes}
       disabled={isDisabled}
       aria-busy={loading || undefined}
       aria-disabled={isDisabled || undefined}
+      onPointerMove={isMagnetic ? handlePointerMove : undefined}
+      onPointerLeave={isMagnetic ? handlePointerLeave : undefined}
       {...rest}
     >
       {loading && (

@@ -1,4 +1,4 @@
-import { Card, Grid, Stack, Badge, Divider } from '@paymentflow/ui';
+import { Card, Grid, Stack, Badge, Divider, Button } from '@paymentflow/ui';
 import {
   dashboardSummary,
   dashboardWallets,
@@ -297,17 +297,16 @@ export default function DashboardPage() {
                 </h2>
                 <div className="dashboard__actions">
                   {QUICK_ACTIONS.map((action) => (
-                    <button
+                    <Button
                       key={action.label}
-                      type="button"
+                      variant="secondary"
+                      interaction="magnetic"
                       className="dashboard__action-card"
                       aria-label={action.label}
+                      iconLeft={<span>{action.icon}</span>}
                     >
-                      <span className="dashboard__action-icon" aria-hidden="true">
-                        {action.icon}
-                      </span>
-                      <span className="dashboard__action-label">{action.label}</span>
-                    </button>
+                      {action.label}
+                    </Button>
                   ))}
                 </div>
               </Stack>
