@@ -1,3 +1,5 @@
+'use client';
+
 import { Card, Grid, Stack, Badge, Divider, Button } from '@paymentflow/ui';
 import {
   dashboardSummary,
