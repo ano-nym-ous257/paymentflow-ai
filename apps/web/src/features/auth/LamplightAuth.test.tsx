@@ -30,7 +30,7 @@ describe('LamplightAuth', () => {
       act(() => {
         vi.advanceTimersByTime(350);
       });
-      expect(screen.getByText('Sign in to PaymentFlow')).toBeInTheDocument();
+      expect(screen.getByText('Welcome back')).toBeInTheDocument();
     });
 
     it('opens to initialMode=signup on first pull', () => {
@@ -40,7 +40,7 @@ describe('LamplightAuth', () => {
       act(() => {
         vi.advanceTimersByTime(350);
       });
-      expect(screen.getByText('Create your account')).toBeInTheDocument();
+      expect(screen.getByText('Create your workspace')).toBeInTheDocument();
     });
 
     it('switches from signin to signup on second pull', () => {
@@ -56,7 +56,7 @@ describe('LamplightAuth', () => {
       act(() => {
         vi.advanceTimersByTime(350);
       });
-      expect(screen.getByText('Create your account')).toBeInTheDocument();
+      expect(screen.getByText('Create your workspace')).toBeInTheDocument();
     });
 
     it('switches from signup to signin on pull', () => {
@@ -72,7 +72,7 @@ describe('LamplightAuth', () => {
       act(() => {
         vi.advanceTimersByTime(350);
       });
-      expect(screen.getByText('Sign in to PaymentFlow')).toBeInTheDocument();
+      expect(screen.getByText('Welcome back')).toBeInTheDocument();
     });
 
     it('pull cord never closes the panel', () => {
@@ -117,7 +117,7 @@ describe('LamplightAuth', () => {
   describe('capsule', () => {
     it('shows capsule when panel is closed', () => {
       renderWithProviders(<LamplightAuth initialMode="signin" />);
-      const capsule = screen.getByText('PaymentFlow');
+      const capsule = screen.getByText('Secure access');
       expect(capsule.parentElement).toHaveAttribute('data-visible', 'true');
     });
 
@@ -127,7 +127,7 @@ describe('LamplightAuth', () => {
       act(() => {
         vi.advanceTimersByTime(350);
       });
-      const capsule = screen.getByText('PaymentFlow');
+      const capsule = screen.getByText('Secure access');
       expect(capsule.parentElement).not.toHaveAttribute('data-visible');
     });
   });

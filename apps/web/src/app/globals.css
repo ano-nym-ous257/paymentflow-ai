@@ -160,6 +160,50 @@
 }
 
 /* ========================================
+   Light Theme Overrides
+   ======================================== */
+
+[data-theme='light'] {
+  --bg-base: #f8fafc;
+  --bg-subtle: #f1f5f9;
+  --bg-muted: #e2e8f0;
+  --bg-canvas: #ffffff;
+
+  --surface: rgba(255, 255, 255, 0.8);
+  --surface-elevated: rgba(241, 245, 249, 0.9);
+  --surface-floating: rgba(255, 255, 255, 0.95);
+  --surface-overlay: rgba(0, 0, 0, 0.3);
+  --surface-solid: #ffffff;
+
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  --text-inverse: #f1f5f9;
+
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --accent-subtle: rgba(37, 99, 235, 0.08);
+  --accent-focus: rgba(37, 99, 235, 0.3);
+  --accent-gradient: linear-gradient(135deg, #2563eb, #0891b2);
+
+  --border-subtle: rgba(15, 23, 42, 0.04);
+  --border-default: rgba(15, 23, 42, 0.08);
+  --border-strong: rgba(15, 23, 42, 0.15);
+  --border-focus: rgba(37, 99, 235, 0.5);
+
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.03);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.03);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.08), 0 4px 8px rgba(0, 0, 0, 0.04);
+  --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.05);
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.03);
+  --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.08), 0 4px 8px rgba(0, 0, 0, 0.04);
+  --shadow-floating: 0 12px 36px rgba(0, 0, 0, 0.1), 0 6px 12px rgba(0, 0, 0, 0.05);
+  --shadow-glow: 0 0 20px rgba(37, 99, 235, 0.1);
+  --shadow-glow-accent: 0 0 30px rgba(8, 145, 178, 0.08);
+}
+
+/* ========================================
    Reset & Base
    ======================================== */
 
@@ -2069,25 +2113,219 @@ body::after {
 }
 
 /* ========================================
-   Auth Layout
+   Theme Toggle
+   ======================================== */
+
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-full);
+  background: var(--surface-elevated);
+  color: var(--text-secondary);
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: color var(--duration-fast) var(--ease-default),
+    background var(--duration-fast) var(--ease-default),
+    border-color var(--duration-fast) var(--ease-default),
+    transform var(--duration-fast) var(--ease-spring);
+}
+
+.theme-toggle:hover {
+  color: var(--text-primary);
+  background: var(--surface-elevated);
+  border-color: var(--border-strong);
+  transform: scale(1.05);
+}
+
+.theme-toggle:active {
+  transform: scale(0.95);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-toggle {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ========================================
+   Auth Layout — Premium Two-Column
    ======================================== */
 
 .auth-layout {
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   min-height: 100vh;
-  padding: 0;
   background: var(--bg-base);
-  overflow: hidden;
+  overflow: clip;
+  position: relative;
 }
 
+.auth-layout::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 50% at 25% 50%, rgba(59, 130, 246, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 70% at 75% 40%, rgba(255, 214, 102, 0.05) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 80% at 80% 30%, rgba(6, 182, 212, 0.04) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.auth-layout::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 40%, var(--bg-base) 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+[data-theme='light'] .auth-layout::before {
+  background:
+    radial-gradient(ellipse 70% 50% at 25% 50%, rgba(37, 99, 235, 0.05) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 70% at 75% 40%, rgba(217, 149, 42, 0.04) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 80% at 80% 30%, rgba(8, 145, 178, 0.03) 0%, transparent 50%);
+}
+
+.auth-layout__theme-toggle {
+  position: fixed;
+  top: var(--space-5);
+  right: var(--space-5);
+  z-index: var(--z-header);
+}
+
+/* --- Left Column: Brand --- */
+
+.auth-layout__brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-10) var(--space-10) var(--space-10) var(--space-12);
+  position: relative;
+  z-index: 1;
+}
+
+.auth-layout__brand::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 1px 1px, var(--border-subtle) 0.5px, transparent 0);
+  background-size: 28px 28px;
+  opacity: 0.25;
+  pointer-events: none;
+}
+
+[data-theme='light'] .auth-layout__brand::before {
+  opacity: 0.15;
+}
+
+.auth-layout__brand-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-4);
+  text-align: left;
+  max-width: 480px;
+}
+
+.auth-layout__logo-mark {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-lg);
+  background: var(--accent-gradient);
+  color: white;
+  font-size: var(--text-h3);
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-tight);
+  box-shadow: var(--shadow-lg), var(--shadow-glow);
+}
+
+.auth-layout__wordmark {
+  font-size: var(--text-h1);
+  font-weight: var(--weight-bold);
+  color: var(--text-primary);
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-tight);
+  margin: 0;
+}
+
+.auth-layout__eyebrow-text {
+  font-size: var(--text-micro);
+  font-weight: var(--weight-semibold);
+  color: var(--accent);
+  letter-spacing: var(--tracking-widest);
+  margin: 0;
+}
+
+.auth-layout__headline {
+  font-size: 38px;
+  font-weight: var(--weight-bold);
+  color: var(--text-primary);
+  letter-spacing: var(--tracking-tight);
+  line-height: 1.15;
+  margin: var(--space-2) 0 0;
+}
+
+.auth-layout__tagline {
+  font-size: 16px;
+  color: var(--text-secondary);
+  margin: 0;
+  max-width: 420px;
+  line-height: 1.6;
+}
+
+.auth-layout__trust-indicators {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+}
+
+.auth-layout__trust-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: 14px;
+  color: var(--text-secondary);
+  font-weight: var(--weight-medium);
+}
+
+.auth-layout__trust-item svg {
+  flex-shrink: 0;
+  color: var(--accent);
+  opacity: 0.85;
+}
+
+[data-theme='light'] .auth-layout__trust-item svg {
+  opacity: 0.9;
+}
+
+/* --- Right Column: Lamp Container --- */
+
 .auth-layout__container {
-  width: 100%;
-  max-width: 460px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  padding: var(--space-8);
+  position: relative;
+  z-index: 1;
 }
 
 /* ========================================
@@ -2095,9 +2333,16 @@ body::after {
    ======================================== */
 
 .lamplight {
-  --lamp-glow-color: rgba(59, 130, 246, 0.35);
+  --lamp-core: rgba(255, 250, 225, 1);
+  --lamp-gold: rgba(245, 189, 65, 0.9);
+  --lamp-amber: rgba(217, 149, 42, 0.65);
+  --lamp-glow: rgba(255, 214, 102, 0.45);
+  --lamp-beam: rgba(255, 230, 150, 0.25);
+  --lamp-beam-soft: rgba(255, 230, 150, 0.12);
+
+  --lamp-glow-color: var(--lamp-glow);
   --lamp-bulb-off: var(--text-muted);
-  --lamp-bulb-on: var(--accent);
+  --lamp-bulb-on: var(--lamp-core);
   --lamp-cord-color: var(--border-strong);
   --lamp-handle-bg: var(--surface-elevated);
   --lamp-handle-border: var(--border-default);
@@ -2109,8 +2354,10 @@ body::after {
   flex-direction: column;
   align-items: center;
   width: 100%;
-  max-width: 460px;
+  max-width: 500px;
+  min-height: 520px;
   isolation: isolate;
+  padding-top: var(--space-4);
 }
 
 /* ========================================
@@ -2126,36 +2373,94 @@ body::after {
 }
 
 .lamplight__mount {
-  width: 48px;
-  height: 8px;
-  background: var(--surface-solid);
+  width: 80px;
+  height: 10px;
+  background: linear-gradient(180deg, #2b2925, #1a1816);
   border-radius: var(--radius-xs) var(--radius-xs) 0 0;
+  border: 1px solid rgba(217, 149, 42, 0.08);
+  border-bottom: none;
 }
 
 .lamplight__shade {
-  width: 80px;
-  height: 36px;
-  background: linear-gradient(180deg, var(--surface-solid) 0%, var(--bg-canvas) 100%);
+  width: 210px;
+  height: 105px;
+  background:
+    linear-gradient(180deg, rgba(60, 52, 42, 0.5) 0%, transparent 30%),
+    linear-gradient(145deg, #352f28 0%, #1e1a16 40%, #121010 75%, #0d0c0a 100%);
   clip-path: polygon(15% 0%, 85% 0%, 100% 100%, 0% 100%);
   display: flex;
   align-items: flex-end;
   justify-content: center;
   position: relative;
+  border-bottom: 2px solid rgba(217, 149, 42, 0.35);
+  box-shadow:
+    inset 0 1px 0 rgba(100, 85, 60, 0.15),
+    inset 0 -10px 20px rgba(255, 214, 102, 0.08),
+    inset 0 -2px 4px rgba(200, 155, 50, 0.1),
+    0 6px 16px rgba(0, 0, 0, 0.45),
+    0 2px 4px rgba(0, 0, 0, 0.25);
 }
 
+/* ========================================
+   Lamplight — Bulb (Layered Realistic)
+   ======================================== */
+
 .lamplight__bulb {
-  width: 12px;
-  height: 12px;
+  width: 48px;
+  height: 48px;
   border-radius: var(--radius-full);
-  background: var(--lamp-bulb-off);
-  margin-bottom: 4px;
+  margin-bottom: 6px;
+  position: relative;
+  transition: box-shadow var(--duration-slow) var(--ease-default);
+  background:
+    radial-gradient(circle at 50% 45%, rgba(255, 243, 200, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(200, 160, 80, 0.3) 0%, rgba(140, 100, 50, 0.15) 60%, transparent 100%);
+  box-shadow:
+    0 0 8px rgba(217, 149, 42, 0.1),
+    0 0 20px rgba(217, 149, 42, 0.05),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.lamplight__bulb::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-full);
+  background: radial-gradient(circle, rgba(255, 240, 200, 0.4) 0%, rgba(200, 160, 80, 0.1) 100%);
   transition: background var(--duration-normal) var(--ease-default),
-    box-shadow var(--duration-slow) var(--ease-default);
+    box-shadow var(--duration-normal) var(--ease-default);
+}
+
+.lamplight__bulb::after {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.06);
 }
 
 .lamplight__bulb--on {
-  background: var(--lamp-bulb-on);
-  box-shadow: 0 0 12px var(--lamp-glow-color), 0 0 24px var(--lamp-glow-color);
+  background:
+    radial-gradient(circle at 50% 45%, var(--lamp-core) 0%, rgba(255, 240, 200, 0.6) 35%, transparent 65%),
+    radial-gradient(circle at 50% 50%, var(--lamp-gold) 0%, var(--lamp-amber) 50%, transparent 100%);
+  box-shadow:
+    0 0 12px var(--lamp-glow),
+    0 0 32px var(--lamp-gold),
+    0 0 64px rgba(255, 214, 102, 0.2),
+    inset 0 0 8px rgba(255, 250, 225, 0.3);
+}
+
+.lamplight__bulb--on::before {
+  background: radial-gradient(circle, rgba(255, 250, 225, 0.9) 0%, rgba(255, 240, 200, 0.3) 100%);
+  box-shadow: 0 0 10px rgba(255, 250, 225, 0.5);
 }
 
 /* ========================================
@@ -2163,35 +2468,48 @@ body::after {
    ======================================== */
 
 .lamplight__beam {
-  width: 0;
-  height: 0;
-  opacity: 0;
-  transition: opacity var(--duration-slow) var(--ease-default),
-    width var(--duration-slow) var(--ease-default),
-    height var(--duration-slow) var(--ease-default);
-  background: linear-gradient(
-    180deg,
-    var(--lamp-glow-color) 0%,
-    rgba(59, 130, 246, 0.08) 60%,
-    transparent 100%
-  );
+  width: 520px;
+  height: 400px;
+  opacity: 0.1;
+  transition: opacity var(--duration-slow) var(--ease-default);
+  background:
+    radial-gradient(
+      ellipse 60% 60% at 50% 0%,
+      var(--lamp-core) 0%,
+      var(--lamp-gold) 10%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse 100% 100% at 50% 0%,
+      var(--lamp-gold) 0%,
+      var(--lamp-amber) 15%,
+      var(--lamp-beam) 50%,
+      var(--lamp-beam-soft) 75%,
+      transparent 100%
+    );
   pointer-events: none;
   position: absolute;
-  top: 44px;
+  top: 150px;
   left: 50%;
   transform: translateX(-50%);
-  clip-path: polygon(30% 0%, 70% 0%, 100% 100%, 0% 100%);
+  clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
   z-index: -1;
+  mask-image:
+    linear-gradient(180deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.6) 60%, transparent 100%),
+    linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.8) 15%, rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 0.8) 85%, transparent 100%);
+  mask-composite: intersect;
+  -webkit-mask-image:
+    linear-gradient(180deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.6) 60%, transparent 100%),
+    linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.8) 15%, rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 0.8) 85%, transparent 100%);
+  -webkit-mask-composite: source-in;
 }
 
 .lamplight__beam--on {
-  width: 320px;
-  height: 400px;
-  opacity: 1;
+  opacity: 0.45;
 }
 
 /* ========================================
-   Lamplight — Cord and Handle
+   Lamplight — Cord, Chain, and Handle
    ======================================== */
 
 .lamplight__cord-container {
@@ -2202,37 +2520,55 @@ body::after {
 
 .lamplight__cord {
   width: 2px;
-  height: 40px;
+  height: 100px;
   background: var(--lamp-cord-color);
   transition: height var(--duration-normal) var(--ease-spring);
 }
 
 .lamplight__cord--pulling {
-  height: 56px;
+  height: 116px;
+}
+
+.lamplight__chain {
+  width: 3px;
+  height: 18px;
+  background: repeating-linear-gradient(
+    180deg,
+    rgba(160, 130, 80, 0.6) 0px,
+    rgba(160, 130, 80, 0.6) 3px,
+    transparent 3px,
+    transparent 5px
+  );
+  opacity: 0.7;
 }
 
 .lamplight__handle {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
-  background: var(--lamp-handle-bg);
-  border: 1px solid var(--lamp-handle-border);
-  border-radius: var(--radius-full);
+  width: 44px;
+  min-width: 44px;
+  height: 52px;
+  background: transparent;
+  border: none;
   cursor: pointer;
-  transition: transform var(--duration-normal) var(--ease-spring),
-    box-shadow var(--duration-fast) var(--ease-default);
+  transition: transform var(--duration-normal) var(--ease-spring);
   padding: 0;
+  position: relative;
 }
 
-.lamplight__handle:hover {
-  box-shadow: 0 0 8px var(--lamp-glow-color);
+.lamplight__handle:hover .lamplight__handle-knob {
+  box-shadow: 0 0 12px var(--lamp-glow), 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .lamplight__handle:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
+  border-radius: var(--radius-md);
+}
+
+.lamplight__handle:disabled {
+  cursor: default;
 }
 
 .lamplight__handle--pulling {
@@ -2240,11 +2576,50 @@ body::after {
 }
 
 .lamplight__handle-knob {
-  width: 10px;
-  height: 10px;
-  border-radius: var(--radius-full);
-  background: var(--accent);
+  width: 28px;
+  height: 48px;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #3a3530 0%, #252220 60%, #1e1b18 100%);
+  border: 1px solid rgba(160, 130, 80, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: box-shadow var(--duration-fast) var(--ease-default);
+}
+
+.lamplight__handle-knob::after {
+  content: '';
+  width: 8px;
+  height: 18px;
+  border-radius: 4px;
+  background: linear-gradient(180deg, rgba(245, 189, 65, 0.7) 0%, rgba(200, 155, 50, 0.5) 100%);
   display: block;
+  box-shadow: 0 0 4px rgba(245, 189, 65, 0.15);
+}
+
+/* --- Pull Instruction --- */
+
+.lamplight__pull-instruction {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-top: var(--space-3);
+  font-size: var(--text-caption);
+  color: var(--text-secondary);
+  letter-spacing: var(--tracking-wide);
+  white-space: nowrap;
+  animation: lamplight-fade-in 0.6s var(--ease-default) both;
+}
+
+.lamplight__pull-arrow {
+  color: var(--text-secondary);
+  opacity: 0.8;
+}
+
+@keyframes lamplight-fade-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 0.85; transform: translateY(0); }
 }
 
 /* ========================================
@@ -2253,16 +2628,24 @@ body::after {
 
 .lamplight__panel {
   width: 100%;
+  max-width: 470px;
   display: grid;
   grid-template-rows: 0fr;
   transition: grid-template-rows var(--duration-entrance) var(--ease-default);
-  border-radius: var(--radius-xl);
+  border-radius: 22px;
   overflow: hidden;
-  margin-top: var(--space-4);
 }
 
 .lamplight__panel--open {
   grid-template-rows: 1fr;
+  background: var(--lamp-panel-bg);
+  border: 1px solid var(--lamp-panel-border);
+  backdrop-filter: blur(20px);
+  box-shadow:
+    var(--shadow-xl),
+    0 0 24px rgba(255, 214, 102, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  border-top-color: rgba(217, 149, 42, 0.2);
 }
 
 .lamplight__panel-content {
@@ -2286,45 +2669,74 @@ body::after {
 }
 
 /* ========================================
-   Lamplight — Capsule (Collapsed State)
+   Lamplight — Capsule (Always Visible When Closed)
    ======================================== */
 
 .lamplight__capsule {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 48px;
-  padding: 0 var(--space-6);
-  background: var(--lamp-panel-bg);
-  border: 1px solid var(--lamp-panel-border);
-  border-radius: var(--radius-full);
+  gap: var(--space-2);
+  width: 400px;
+  max-width: calc(100vw - 40px);
+  min-height: 96px;
+  padding: 20px 28px;
+  background: var(--surface-elevated);
+  border: 1px solid var(--border-strong);
+  border-radius: 20px;
   backdrop-filter: blur(12px);
-  margin: var(--space-3) var(--space-4);
+  margin-top: var(--space-8);
   opacity: 1;
+  box-shadow:
+    0 0 16px rgba(255, 214, 102, 0.06),
+    0 4px 16px rgba(0, 0, 0, 0.15);
   transition: opacity var(--duration-normal) var(--ease-default),
-    transform var(--duration-normal) var(--ease-default);
+    transform var(--duration-normal) var(--ease-default),
+    max-height var(--duration-normal) var(--ease-default);
+  max-height: 200px;
+  overflow: hidden;
+}
+
+.lamplight__capsule-icon {
+  color: var(--lamp-gold);
+  flex-shrink: 0;
 }
 
 .lamplight__capsule[data-visible] {
   opacity: 1;
   transform: scale(1);
+  max-height: 200px;
 }
 
 .lamplight__capsule:not([data-visible]) {
   opacity: 0;
   transform: scale(0.95);
-  height: 0;
+  max-height: 0;
   margin: 0;
   padding: 0;
+  border-width: 0;
   overflow: hidden;
 }
 
 .lamplight__capsule-text {
+  font-size: var(--text-body);
+  font-weight: var(--weight-semibold);
+  color: var(--text-primary);
+  letter-spacing: var(--tracking-wide);
+}
+
+.lamplight__capsule-label {
   font-size: var(--text-body-sm);
   font-weight: var(--weight-medium);
   color: var(--text-secondary);
-  letter-spacing: var(--tracking-wider);
-  text-transform: uppercase;
+}
+
+.lamplight__capsule-hint {
+  font-size: var(--text-caption);
+  color: var(--text-muted);
+  font-style: italic;
+  margin-top: var(--space-1);
 }
 
 /* ========================================
@@ -2387,12 +2799,22 @@ body::after {
   gap: var(--space-5);
 }
 
-.lamplight__form-title {
-  font-size: var(--text-h2);
+.lamplight__form-eyebrow {
+  font-size: var(--text-micro);
   font-weight: var(--weight-semibold);
+  color: var(--accent);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.lamplight__form-title {
+  font-size: var(--text-h1);
+  font-weight: var(--weight-bold);
   color: var(--text-primary);
   margin: 0;
   line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
 }
 
 .lamplight__form-subtitle {
@@ -2419,6 +2841,72 @@ body::after {
 }
 
 /* ========================================
+   Input Field — Base Styles
+   ======================================== */
+
+.input-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.input-field__label {
+  font-size: var(--text-body-sm);
+  font-weight: var(--weight-medium);
+  color: var(--text-secondary);
+  letter-spacing: var(--tracking-normal);
+}
+
+.input-field__input {
+  display: block;
+  width: 100%;
+  min-height: 48px;
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--text-body);
+  font-family: inherit;
+  color: var(--text-primary);
+  background: var(--surface);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  outline: none;
+  transition: border-color var(--duration-fast) var(--ease-default),
+    box-shadow var(--duration-fast) var(--ease-default);
+}
+
+.input-field__input::placeholder {
+  color: var(--text-muted);
+}
+
+.input-field__input:hover {
+  border-color: var(--border-strong);
+}
+
+.input-field__input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.input-field__input[aria-invalid='true'] {
+  border-color: var(--danger);
+}
+
+.input-field__input[aria-invalid='true']:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+}
+
+.input-field__error {
+  font-size: var(--text-caption);
+  color: var(--danger);
+  margin: 0;
+}
+
+.input-field__hint {
+  font-size: var(--text-caption);
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* ========================================
    Password Field
    ======================================== */
 
@@ -2434,17 +2922,17 @@ body::after {
 
 .input-field__password-toggle {
   position: absolute;
-  right: var(--space-2);
+  right: var(--space-1);
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 44px;
+  height: 44px;
   padding: 0;
   border: none;
   border-radius: var(--radius-sm);
   background: transparent;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   cursor: pointer;
   transition: color var(--duration-fast) var(--ease-default);
 }
@@ -2474,8 +2962,9 @@ body::after {
   gap: var(--space-2);
   cursor: pointer;
   font-size: var(--text-body-sm);
-  color: var(--text-secondary);
+  color: var(--text-primary);
   line-height: var(--leading-normal);
+  position: relative;
 }
 
 .checkbox-field__input {
@@ -2498,6 +2987,17 @@ body::after {
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+}
+
+.checkbox-field__check::before {
+  content: '';
+  position: absolute;
+  width: 44px;
+  height: 44px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .checkbox-field__input:checked + .checkbox-field__check {
@@ -2584,22 +3084,176 @@ body::after {
   .lamplight__beam,
   .lamplight__cord,
   .lamplight__handle,
+  .lamplight__handle-knob,
   .lamplight__panel,
   .lamplight__capsule,
   .lamplight__form-container {
     transition-duration: 0.01ms !important;
-    animation-duration: 0.01ms !important;
+    animation: none !important;
   }
+
+  .lamplight__pull-instruction {
+    animation: none !important;
+    opacity: 0.7;
+  }
+
+  .lamplight__handle--pulling {
+    transform: none;
+  }
+}
+
+/* ========================================
+   Light Theme — Lamplight Overrides
+   ======================================== */
+
+[data-theme='light'] .lamplight {
+  --lamp-core: rgba(217, 149, 42, 0.95);
+  --lamp-gold: rgba(194, 130, 30, 0.7);
+  --lamp-amber: rgba(180, 120, 25, 0.45);
+  --lamp-glow: rgba(217, 149, 42, 0.3);
+  --lamp-beam: rgba(245, 225, 170, 0.14);
+  --lamp-beam-soft: rgba(245, 225, 170, 0.06);
+  --lamp-bulb-on: #b8860b;
+}
+
+[data-theme='light'] .lamplight__shade {
+  background:
+    linear-gradient(180deg, rgba(80, 70, 55, 0.4) 0%, transparent 30%),
+    linear-gradient(145deg, #4a443e, #2b2720 55%, #1e1a15);
+  border-bottom-color: rgba(180, 120, 25, 0.35);
+  box-shadow:
+    inset 0 1px 0 rgba(100, 85, 60, 0.12),
+    inset 0 -8px 16px rgba(217, 149, 42, 0.06),
+    0 6px 20px rgba(0, 0, 0, 0.2),
+    0 0 30px rgba(217, 149, 42, 0.08);
+}
+
+[data-theme='light'] .lamplight__mount {
+  background: linear-gradient(180deg, #3d3830, #2b2720);
+}
+
+[data-theme='light'] .lamplight__panel--open {
+  box-shadow: var(--shadow-xl), 0 0 20px rgba(217, 149, 42, 0.06);
+}
+
+[data-theme='light'] .lamplight__capsule {
+  background: rgba(255, 255, 255, 0.92);
+  border-color: var(--border-default);
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.08),
+    0 0 12px rgba(217, 149, 42, 0.06);
+}
+
+[data-theme='light'] .auth-layout__trust-item svg {
+  opacity: 0.8;
+}
+
+/* ========================================
+   Lamplight — Closed State Faint Glow
+   ======================================== */
+
+.lamplight__bulb {
+  box-shadow: 0 0 6px rgba(217, 149, 42, 0.08);
+}
+
+.lamplight__beam:not(.lamplight__beam--on) {
+  width: 200px;
+  height: 160px;
+  opacity: 0.12;
+}
+
+/* ========================================
+   Lamplight — Open State Golden Halo
+   ======================================== */
+
+.lamplight__shade::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 180px;
+  height: 6px;
+  background: radial-gradient(ellipse at center, var(--lamp-glow) 0%, rgba(245, 189, 65, 0.15) 50%, transparent 85%);
+  border-radius: var(--radius-full);
+  opacity: 0;
+  transition: opacity var(--duration-slow) var(--ease-default);
+  pointer-events: none;
+}
+
+.lamplight:has(.lamplight__bulb--on) .lamplight__shade::after {
+  opacity: 1;
+}
+
+.lamplight__panel--open::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70%;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(245, 189, 65, 0.2) 30%,
+    rgba(255, 214, 102, 0.3) 50%,
+    rgba(245, 189, 65, 0.2) 70%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 1;
 }
 
 /* ========================================
    Mobile — Lamplight
    ======================================== */
 
+@media (max-width: 900px) {
+  .auth-layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+  }
+
+  .auth-layout__brand {
+    padding: var(--space-8) var(--space-6) var(--space-4);
+  }
+
+  .auth-layout__logo-mark {
+    width: 48px;
+    height: 48px;
+    font-size: var(--text-body-lg);
+  }
+
+  .auth-layout__wordmark {
+    font-size: var(--text-h2);
+  }
+
+  .auth-layout__tagline {
+    font-size: var(--text-body-sm);
+  }
+
+  .auth-layout__headline {
+    font-size: var(--text-h3);
+  }
+
+  .auth-layout__trust-indicators {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-4);
+  }
+
+  .auth-layout__container {
+    padding: 0 var(--space-4) var(--space-8);
+  }
+}
+
 @media (max-width: 480px) {
   .lamplight {
     max-width: 100%;
     padding: 0 var(--space-3);
+    min-height: 380px;
   }
 
   .lamplight__form-container {
@@ -2607,7 +3261,43 @@ body::after {
   }
 
   .lamplight__shade {
-    width: 64px;
-    height: 28px;
+    width: 147px;
+    height: 74px;
+  }
+
+  .lamplight__bulb {
+    width: 36px;
+    height: 36px;
+  }
+
+  .lamplight__cord {
+    height: 95px;
+  }
+
+  .lamplight__cord--pulling {
+    height: 106px;
+  }
+
+  .lamplight__handle-knob {
+    width: 24px;
+    height: 40px;
+  }
+
+  .lamplight__handle-knob::after {
+    width: 6px;
+    height: 14px;
+  }
+
+  .lamplight__mount {
+    width: 56px;
+  }
+
+  .lamplight__beam--on {
+    width: 320px;
+    height: 280px;
+  }
+
+  .lamplight__form-title {
+    font-size: var(--text-h2);
   }
 }

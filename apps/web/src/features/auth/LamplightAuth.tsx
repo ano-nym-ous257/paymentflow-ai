@@ -1,14 +1,17 @@
 'use client';
 
 import { useState, useCallback } from 'react';
+import type { AuthView } from './auth.types';
 import { Lamplight } from './Lamplight';
 import { AuthPanel } from './AuthPanel';
 
-export type AuthView = 'closed' | 'signin' | 'signup';
+export type { AuthView } from './auth.types';
 
 export interface LamplightAuthProps {
   initialMode: 'signin' | 'signup';
 }
+
+const PANEL_ID = 'lamplight-auth-panel';
 
 export function LamplightAuth({ initialMode }: LamplightAuthProps) {
   const [view, setView] = useState<AuthView>('closed');
@@ -42,8 +45,15 @@ export function LamplightAuth({ initialMode }: LamplightAuthProps) {
 
   return (
     <div className="lamplight" data-state={view} data-pulling={isPulling || undefined}>
-      <Lamplight isOn={isOpen} isPulling={isPulling} onPull={handlePull} pullLabel={pullLabel} />
-      <AuthPanel view={view} onClose={handleClose} />
+      <Lamplight
+        isOn={isOpen}
+        isPulling={isPulling}
+        onPull={handlePull}
+        pullLabel={pullLabel}
+        view={view}
+        panelId={PANEL_ID}
+      />
+      <AuthPanel view={view} onClose={handleClose} panelId={PANEL_ID} />
     </div>
   );
 }
