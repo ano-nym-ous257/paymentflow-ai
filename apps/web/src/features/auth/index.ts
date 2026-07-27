@@ -8,3 +8,4 @@ export { SignInForm } from './SignInForm';
 export { SignUpForm } from './SignUpForm';
 export { PasswordField } from './PasswordField';
 export type { PasswordFieldProps } from './PasswordField';
+export { ThemeToggle } from './ThemeToggle';

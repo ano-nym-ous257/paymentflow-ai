@@ -29,8 +29,9 @@ export function SignInForm() {
 
   return (
     <form className="lamplight__form" onSubmit={handleSubmit} noValidate>
-      <h2 className="lamplight__form-title">Sign in to PaymentFlow</h2>
-      <p className="lamplight__form-subtitle">Enter your credentials to access your account</p>
+      <p className="lamplight__form-eyebrow">SECURE ACCESS</p>
+      <h2 className="lamplight__form-title">Welcome back</h2>
+      <p className="lamplight__form-subtitle">Sign in to your PaymentFlow workspace</p>
 
       {error && (
         <Alert variant="error" className="lamplight__form-alert">
@@ -69,8 +70,6 @@ export function SignInForm() {
       >
         Sign In
       </Button>
-
-      <p className="lamplight__form-hint">Pull the cord above to switch to sign up</p>
     </form>
   );
 }

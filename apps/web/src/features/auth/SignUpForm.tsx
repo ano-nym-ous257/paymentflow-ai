@@ -37,8 +37,9 @@ export function SignUpForm() {
 
   return (
     <form className="lamplight__form" onSubmit={handleSubmit} noValidate>
-      <h2 className="lamplight__form-title">Create your account</h2>
-      <p className="lamplight__form-subtitle">Start managing your payments today</p>
+      <p className="lamplight__form-eyebrow">NEW WORKSPACE</p>
+      <h2 className="lamplight__form-title">Create your workspace</h2>
+      <p className="lamplight__form-subtitle">Start managing payments in minutes</p>
 
       {error && (
         <Alert variant="error" className="lamplight__form-alert">
@@ -67,7 +68,7 @@ export function SignUpForm() {
         />
         <PasswordField
           label="Password"
-          placeholder="At least 12 characters"
+          placeholder="Create a password"
           autoComplete="new-password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
@@ -101,8 +102,6 @@ export function SignUpForm() {
       >
         Create Account
       </Button>
-
-      <p className="lamplight__form-hint">Pull the cord above to switch to sign in</p>
     </form>
   );
 }
