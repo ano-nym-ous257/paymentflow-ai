@@ -4,6 +4,7 @@ import { useState, useCallback } from 'react';
 import type { AuthView } from './auth.types';
 import { Lamplight } from './Lamplight';
 import { AuthPanel } from './AuthPanel';
+import { useAuth } from '@/providers/auth-provider';
 
 export type { AuthView } from './auth.types';
 
@@ -16,11 +17,13 @@ const PANEL_ID = 'lamplight-auth-panel';
 export function LamplightAuth({ initialMode }: LamplightAuthProps) {
   const [view, setView] = useState<AuthView>('closed');
   const [isPulling, setIsPulling] = useState(false);
+  const { clearError } = useAuth();
 
   const handlePull = useCallback(() => {
     setIsPulling(true);
     const timeout = setTimeout(() => {
       setIsPulling(false);
+      clearError();
       setView((current) => {
         if (current === 'closed') return initialMode;
         if (current === 'signin') return 'signup';
@@ -28,11 +31,12 @@ export function LamplightAuth({ initialMode }: LamplightAuthProps) {
       });
     }, 300);
     return () => clearTimeout(timeout);
-  }, [initialMode]);
+  }, [initialMode, clearError]);
 
   const handleClose = useCallback(() => {
+    clearError();
     setView('closed');
-  }, []);
+  }, [clearError]);
 
   const isOpen = view !== 'closed';
 

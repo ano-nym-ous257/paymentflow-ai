@@ -36,11 +36,6 @@ export function PasswordField({
       <label htmlFor={fieldId} className="input-field__label">
         {label}
       </label>
-      {hint && (
-        <p id={hintId} className="input-field__hint">
-          {hint}
-        </p>
-      )}
       <div className="input-field__password-wrapper">
         <input
           id={fieldId}
@@ -62,6 +57,11 @@ export function PasswordField({
       {error && (
         <p id={errorId} className="input-field__error" role="alert">
           {error}
+        </p>
+      )}
+      {hint && !error && (
+        <p id={hintId} className="input-field__hint">
+          {hint}
         </p>
       )}
     </div>

@@ -35,15 +35,22 @@ export function SignUpForm() {
     [name, email, password, confirmPassword, acceptedTerms, signup, clearError],
   );
 
+  const isPending = error === 'Authentication service integration is pending.';
+
   return (
     <form className="lamplight__form" onSubmit={handleSubmit} noValidate>
       <p className="lamplight__form-eyebrow">NEW WORKSPACE</p>
       <h2 className="lamplight__form-title">Create your workspace</h2>
       <p className="lamplight__form-subtitle">Start managing payments in minutes</p>
 
-      {error && (
+      {error && !isPending && (
         <Alert variant="error" className="lamplight__form-alert">
           {error}
+        </Alert>
+      )}
+      {isPending && (
+        <Alert variant="info" className="lamplight__form-alert">
+          Authentication service integration is pending.
         </Alert>
       )}
 
@@ -54,7 +61,10 @@ export function SignUpForm() {
           placeholder="Jane Smith"
           autoComplete="name"
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e) => {
+            setName(e.target.value);
+            clearError();
+          }}
           error={fieldErrors['name']}
         />
         <Input
@@ -63,15 +73,21 @@ export function SignUpForm() {
           placeholder="you@company.com"
           autoComplete="email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => {
+            setEmail(e.target.value);
+            clearError();
+          }}
           error={fieldErrors['email']}
         />
         <PasswordField
           label="Password"
-          placeholder="Create a password"
+          placeholder="Create a secure password"
           autoComplete="new-password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e) => {
+            setPassword(e.target.value);
+            clearError();
+          }}
           error={fieldErrors['password']}
           hint="Must be at least 12 characters"
         />
@@ -80,7 +96,10 @@ export function SignUpForm() {
           placeholder="Re-enter your password"
           autoComplete="new-password"
           value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
+          onChange={(e) => {
+            setConfirmPassword(e.target.value);
+            clearError();
+          }}
           error={fieldErrors['confirmPassword']}
         />
         <Checkbox

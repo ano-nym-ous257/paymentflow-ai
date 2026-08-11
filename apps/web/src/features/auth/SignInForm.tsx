@@ -27,15 +27,22 @@ export function SignInForm() {
     [email, password, login, clearError],
   );
 
+  const isPending = error === 'Authentication service integration is pending.';
+
   return (
     <form className="lamplight__form" onSubmit={handleSubmit} noValidate>
       <p className="lamplight__form-eyebrow">SECURE ACCESS</p>
       <h2 className="lamplight__form-title">Welcome back</h2>
       <p className="lamplight__form-subtitle">Sign in to your PaymentFlow workspace</p>
 
-      {error && (
+      {error && !isPending && (
         <Alert variant="error" className="lamplight__form-alert">
           {error}
+        </Alert>
+      )}
+      {isPending && (
+        <Alert variant="info" className="lamplight__form-alert">
+          Authentication service integration is pending.
         </Alert>
       )}
 
@@ -46,7 +53,10 @@ export function SignInForm() {
           placeholder="you@company.com"
           autoComplete="email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => {
+            setEmail(e.target.value);
+            clearError();
+          }}
           error={fieldErrors['email']}
         />
         <PasswordField
@@ -54,7 +64,10 @@ export function SignInForm() {
           placeholder="Enter your password"
           autoComplete="current-password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e) => {
+            setPassword(e.target.value);
+            clearError();
+          }}
           error={fieldErrors['password']}
         />
       </div>

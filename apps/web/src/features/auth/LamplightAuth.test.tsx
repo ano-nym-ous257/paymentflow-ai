@@ -3,7 +3,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { LamplightAuth } from './LamplightAuth';
 import { AuthProvider } from '@/providers/auth-provider';
 
-function renderWithProviders(ui: React.ReactElement) {
+function renderWithProviders(ui: React.ReactElement = <LamplightAuth />) {
   return render(<AuthProvider>{ui}</AuthProvider>);
 }
 
