@@ -2,6 +2,7 @@ import { render, screen, fireEvent, act } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { LamplightAuth } from './LamplightAuth';
 import { AuthProvider } from '@/providers/auth-provider';
+import { authAdapter } from '@/lib/auth/adapter';
 
 function renderWithProviders(ui: React.ReactElement = <LamplightAuth />) {
   return render(<AuthProvider>{ui}</AuthProvider>);
@@ -10,10 +11,12 @@ function renderWithProviders(ui: React.ReactElement = <LamplightAuth />) {
 describe('LamplightAuth', () => {
   beforeEach(() => {
     vi.useFakeTimers();
+    vi.spyOn(authAdapter, 'getCurrentUser').mockReturnValue(new Promise(() => {}));
   });
 
   afterEach(() => {
     vi.useRealTimers();
+    vi.restoreAllMocks();
   });
 
   describe('state machine', () => {

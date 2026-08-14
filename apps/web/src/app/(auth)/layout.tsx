@@ -1,41 +1,44 @@
 'use client';
 
 import { ThemeToggle } from '@/features/auth/ThemeToggle';
+import { AuthGuard } from '@/providers/auth-route-guards';
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="auth-layout">
-      <div className="auth-layout__theme-toggle">
-        <ThemeToggle />
-      </div>
-      <div className="auth-layout__brand">
-        <div className="auth-layout__brand-content">
-          <div className="auth-layout__logo-mark">PF</div>
-          <h1 className="auth-layout__wordmark">PaymentFlow AI</h1>
-          <p className="auth-layout__eyebrow-text">INTELLIGENT FINANCIAL OPERATIONS</p>
-          <p className="auth-layout__headline">Financial operations, illuminated.</p>
-          <p className="auth-layout__tagline">
-            Manage payments, wallets, approvals, and intelligent financial workflows from one secure
-            workspace.
-          </p>
-          <div className="auth-layout__trust-indicators">
-            <div className="auth-layout__trust-item">
-              <ShieldIcon />
-              <span>Secure workspace</span>
-            </div>
-            <div className="auth-layout__trust-item">
-              <CheckIcon />
-              <span>Human-approved actions</span>
-            </div>
-            <div className="auth-layout__trust-item">
-              <SparkleIcon />
-              <span>AI-assisted operations</span>
+    <AuthGuard>
+      <div className="auth-layout">
+        <div className="auth-layout__theme-toggle">
+          <ThemeToggle />
+        </div>
+        <div className="auth-layout__brand">
+          <div className="auth-layout__brand-content">
+            <div className="auth-layout__logo-mark">PF</div>
+            <h1 className="auth-layout__wordmark">PaymentFlow AI</h1>
+            <p className="auth-layout__eyebrow-text">INTELLIGENT FINANCIAL OPERATIONS</p>
+            <p className="auth-layout__headline">Financial operations, illuminated.</p>
+            <p className="auth-layout__tagline">
+              Manage payments, wallets, approvals, and intelligent financial workflows from one
+              secure workspace.
+            </p>
+            <div className="auth-layout__trust-indicators">
+              <div className="auth-layout__trust-item">
+                <ShieldIcon />
+                <span>Secure workspace</span>
+              </div>
+              <div className="auth-layout__trust-item">
+                <CheckIcon />
+                <span>Human-approved actions</span>
+              </div>
+              <div className="auth-layout__trust-item">
+                <SparkleIcon />
+                <span>AI-assisted operations</span>
+              </div>
             </div>
           </div>
         </div>
+        <div className="auth-layout__container">{children}</div>
       </div>
-      <div className="auth-layout__container">{children}</div>
-    </div>
+    </AuthGuard>
   );
 }
 

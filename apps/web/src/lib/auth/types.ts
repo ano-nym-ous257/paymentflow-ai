@@ -15,6 +15,7 @@ export interface User {
 export interface AuthState {
   user: User | null;
   isAuthenticated: boolean;
+  isInitializing: boolean;
   isLoading: boolean;
   error: string | null;
 }
@@ -38,7 +39,7 @@ export interface ResetPasswordRequest {
 export interface AuthContextValue extends AuthState {
   login: (credentials: LoginCredentials) => Promise<void>;
   signup: (credentials: SignupCredentials) => Promise<void>;
-  logout: () => void;
+  logout: () => Promise<void>;
   resetPassword: (request: ResetPasswordRequest) => Promise<void>;
   clearError: () => void;
 }

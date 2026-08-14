@@ -1,6 +1,14 @@
 'use client';
 
-import { createContext, useContext, useState, useCallback, type ReactNode } from 'react';
+import {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useEffect,
+  useRef,
+  type ReactNode,
+} from 'react';
 import type {
   AuthContextValue,
   AuthState,
@@ -13,6 +21,15 @@ import { authAdapter } from '@/lib/auth/adapter';
 const initialState: AuthState = {
   user: null,
   isAuthenticated: false,
+  isInitializing: true,
+  isLoading: false,
+  error: null,
+};
+
+const loggedOutState: AuthState = {
+  user: null,
+  isAuthenticated: false,
+  isInitializing: false,
   isLoading: false,
   error: null,
 };
@@ -25,6 +42,30 @@ export interface AuthProviderProps {
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [state, setState] = useState<AuthState>(initialState);
+  const didInit = useRef(false);
+
+  useEffect(() => {
+    if (didInit.current) return;
+    didInit.current = true;
+    authAdapter
+      .getCurrentUser()
+      .then((user) => {
+        if (user) {
+          setState({
+            user,
+            isAuthenticated: true,
+            isInitializing: false,
+            isLoading: false,
+            error: null,
+          });
+        } else {
+          setState(loggedOutState);
+        }
+      })
+      .catch(() => {
+        setState(loggedOutState);
+      });
+  }, []);
 
   const clearError = useCallback(() => {
     setState((prev: AuthState) => ({ ...prev, error: null }));
@@ -34,7 +75,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
     setState((prev: AuthState) => ({ ...prev, isLoading: true, error: null }));
     try {
       const user = await authAdapter.login(credentials);
-      setState({ user, isAuthenticated: true, isLoading: false, error: null });
+      setState({
+        user,
+        isAuthenticated: true,
+        isInitializing: false,
+        isLoading: false,
+        error: null,
+      });
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Login failed';
       setState((prev: AuthState) => ({ ...prev, isLoading: false, error: message }));
@@ -45,16 +92,28 @@ export function AuthProvider({ children }: AuthProviderProps) {
     setState((prev: AuthState) => ({ ...prev, isLoading: true, error: null }));
     try {
       const user = await authAdapter.signup(credentials);
-      setState({ user, isAuthenticated: true, isLoading: false, error: null });
+      setState({
+        user,
+        isAuthenticated: true,
+        isInitializing: false,
+        isLoading: false,
+        error: null,
+      });
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Sign up failed';
       setState((prev: AuthState) => ({ ...prev, isLoading: false, error: message }));
     }
   }, []);
 
-  const logout = useCallback(() => {
-    authAdapter.logout().catch(() => {});
-    setState(initialState);
+  const logout = useCallback(async () => {
+    setState((prev: AuthState) => ({ ...prev, isLoading: true, error: null }));
+    try {
+      await authAdapter.logout();
+    } catch {
+      // Local authentication state must still be cleared if the provider is unavailable.
+    } finally {
+      setState(loggedOutState);
+    }
   }, []);
 
   const resetPassword = useCallback(async (request: ResetPasswordRequest) => {
