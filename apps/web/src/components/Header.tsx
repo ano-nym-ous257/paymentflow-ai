@@ -1,12 +1,31 @@
 'use client';
 
+import { useCallback, useRef, useState } from 'react';
 import Link from 'next/link';
+import { useAuth } from '@/providers/auth-provider';
 
 export interface HeaderProps {
   onMenuToggle: () => void;
 }
 
 export function Header({ onMenuToggle }: HeaderProps) {
+  const { logout } = useAuth();
+  const logoutInProgress = useRef(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  const handleLogout = useCallback(async () => {
+    if (logoutInProgress.current) return;
+    logoutInProgress.current = true;
+    setIsLoggingOut(true);
+
+    try {
+      await logout();
+    } catch {
+      logoutInProgress.current = false;
+      setIsLoggingOut(false);
+    }
+  }, [logout]);
+
   return (
     <header className="shell__header header" role="banner">
       <div className="header__inner">
@@ -77,6 +96,15 @@ export function Header({ onMenuToggle }: HeaderProps) {
           </button>
           <button type="button" className="header__avatar" aria-label="User menu">
             <span className="header__avatar-initials">MR</span>
+          </button>
+          <button
+            type="button"
+            className="header__logout"
+            onClick={() => void handleLogout()}
+            disabled={isLoggingOut}
+            aria-busy={isLoggingOut}
+          >
+            {isLoggingOut ? 'Logging out…' : 'Log out'}
           </button>
         </div>
       </div>

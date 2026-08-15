@@ -2,13 +2,15 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { authAdapter } from '@/lib/auth/adapter';
 import type { User } from '@/lib/auth/types';
-import { AuthProvider, useAuth } from './auth-provider';
+import { AppShell } from '@/components/AppShell';
+import { AuthProvider } from './auth-provider';
 import { AuthGuard, WorkspaceGuard } from './auth-route-guards';
 
 const { replace } = vi.hoisted(() => ({ replace: vi.fn() }));
 
 vi.mock('next/navigation', () => ({
   useRouter: () => ({ replace }),
+  usePathname: () => '/dashboard',
 }));
 
 const user: User = {
@@ -19,15 +21,6 @@ const user: User = {
   organization: 'PaymentFlow',
   createdAt: '2026-08-14T00:00:00.000Z',
 };
-
-function LogoutButton() {
-  const { logout } = useAuth();
-  return (
-    <button type="button" onClick={() => void logout()}>
-      Log out
-    </button>
-  );
-}
 
 describe('authentication route guards', () => {
   beforeEach(() => {
@@ -92,8 +85,7 @@ describe('authentication route guards', () => {
     render(
       <AuthProvider>
         <WorkspaceGuard>
-          <span>Protected workspace</span>
-          <LogoutButton />
+          <AppShell>Protected workspace</AppShell>
         </WorkspaceGuard>
       </AuthProvider>,
     );
