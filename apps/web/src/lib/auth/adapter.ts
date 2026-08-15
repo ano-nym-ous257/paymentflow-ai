@@ -1,13 +1,10 @@
+import type { SupabaseClient } from '@supabase/supabase-js';
 import type { LoginCredentials, SignupCredentials, ResetPasswordRequest, User } from './types';
+import { normalizeAuthError, EMAIL_CONFIRMATION_REQUIRED_MESSAGE } from './errors';
+import { mapSupabaseUser } from './supabase-user-mapper';
+import { getPasswordRecoveryRedirectUrl } from '@/lib/supabase/config';
 
-/**
- * Contract for authentication backends.
- *
- * The active export (`authAdapter`) uses `PendingAuthAdapter` — a stub that
- * rejects every mutation with a user-facing message. Swap in a real
- * implementation (e.g. Supabase, Auth0, NestJS auth-service) when M1
- * backend work begins. No fake users, no localStorage, no demo passwords.
- */
+/** Application-level contract implemented by platform-specific authentication backends. */
 export interface AuthAdapter {
   login: (credentials: LoginCredentials) => Promise<User>;
   signup: (credentials: SignupCredentials) => Promise<User>;
@@ -16,34 +13,115 @@ export interface AuthAdapter {
   getCurrentUser: () => Promise<User | null>;
 }
 
-const PENDING_MESSAGE = 'Authentication service integration is pending.';
-const SIMULATED_LATENCY_MS = 600;
+type SupabaseAuthClient = Pick<
+  SupabaseClient['auth'],
+  'signInWithPassword' | 'signUp' | 'signOut' | 'resetPasswordForEmail' | 'getUser'
+>;
 
-class PendingAuthAdapter implements AuthAdapter {
-  private async reject(): Promise<never> {
-    await new Promise((r) => setTimeout(r, SIMULATED_LATENCY_MS));
-    throw new Error(PENDING_MESSAGE);
+type SupabaseAuthClientFactory = () => SupabaseAuthClient | Promise<SupabaseAuthClient>;
+type PasswordRecoveryRedirectFactory = () => string;
+
+function isMissingSessionError(error: unknown): boolean {
+  if (!error || typeof error !== 'object') return false;
+  const candidate = error as { code?: string; name?: string; message?: string };
+  return (
+    candidate.code === 'session_not_found' ||
+    candidate.name === 'AuthSessionMissingError' ||
+    candidate.message?.toLowerCase().includes('auth session missing') === true
+  );
+}
+
+export class SupabaseAuthAdapter implements AuthAdapter {
+  constructor(
+    private readonly getAuthClient: SupabaseAuthClientFactory,
+    private readonly getPasswordRecoveryRedirect: PasswordRecoveryRedirectFactory = getPasswordRecoveryRedirectUrl,
+  ) {}
+
+  async login(credentials: LoginCredentials): Promise<User> {
+    let response;
+    try {
+      const authClient = await this.getAuthClient();
+      response = await authClient.signInWithPassword({
+        email: credentials.email,
+        password: credentials.password,
+      });
+    } catch (error) {
+      throw normalizeAuthError(error);
+    }
+    const { data, error } = response;
+
+    if (error) throw normalizeAuthError(error);
+    if (!data.user) throw normalizeAuthError();
+    return mapSupabaseUser(data.user);
   }
 
-  async login(_credentials: LoginCredentials): Promise<User> {
-    return this.reject();
-  }
+  async signup(credentials: SignupCredentials): Promise<User> {
+    let response;
+    try {
+      const authClient = await this.getAuthClient();
+      response = await authClient.signUp({
+        email: credentials.email,
+        password: credentials.password,
+        options: {
+          data: {
+            full_name: credentials.name,
+          },
+        },
+      });
+    } catch (error) {
+      throw normalizeAuthError(error);
+    }
+    const { data, error } = response;
 
-  async signup(_credentials: SignupCredentials): Promise<User> {
-    return this.reject();
+    if (error) throw normalizeAuthError(error);
+    if (!data.user) throw normalizeAuthError();
+    if (!data.session) throw new Error(EMAIL_CONFIRMATION_REQUIRED_MESSAGE);
+    return mapSupabaseUser(data.user);
   }
 
   async logout(): Promise<void> {
-    return this.reject();
+    let response;
+    try {
+      const authClient = await this.getAuthClient();
+      response = await authClient.signOut();
+    } catch (error) {
+      throw normalizeAuthError(error);
+    }
+    const { error } = response;
+    if (error) throw normalizeAuthError(error);
   }
 
-  async resetPassword(_request: ResetPasswordRequest): Promise<void> {
-    return this.reject();
+  async resetPassword(request: ResetPasswordRequest): Promise<void> {
+    let response;
+    try {
+      const authClient = await this.getAuthClient();
+      const redirectTo = this.getPasswordRecoveryRedirect();
+      response = await authClient.resetPasswordForEmail(request.email, { redirectTo });
+    } catch (error) {
+      throw normalizeAuthError(error);
+    }
+    const { error } = response;
+    if (error) throw normalizeAuthError(error);
   }
 
   async getCurrentUser(): Promise<User | null> {
-    return null;
+    let response;
+    try {
+      const authClient = await this.getAuthClient();
+      response = await authClient.getUser();
+    } catch (error) {
+      throw normalizeAuthError(error);
+    }
+    const { data, error } = response;
+    if (error) {
+      if (isMissingSessionError(error)) return null;
+      throw normalizeAuthError(error);
+    }
+    return data.user ? mapSupabaseUser(data.user) : null;
   }
 }
 
-export const authAdapter: AuthAdapter = new PendingAuthAdapter();
+export const authAdapter: AuthAdapter = new SupabaseAuthAdapter(async () => {
+  const { getSupabaseBrowserClient } = await import('@/lib/supabase/client');
+  return getSupabaseBrowserClient().auth;
+});

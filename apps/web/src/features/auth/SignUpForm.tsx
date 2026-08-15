@@ -5,6 +5,7 @@ import { Button, Input, Checkbox, Alert } from '@paymentflow/ui';
 import { PasswordField } from './PasswordField';
 import { validateSignupForm } from '@/lib/auth/validation';
 import { useAuth } from '@/providers/auth-provider';
+import { EMAIL_CONFIRMATION_REQUIRED_MESSAGE } from '@/lib/auth/errors';
 
 export function SignUpForm() {
   const { signup, isLoading, error, clearError } = useAuth();
@@ -36,6 +37,7 @@ export function SignUpForm() {
   );
 
   const isPending = error === 'Authentication service integration is pending.';
+  const isConfirmationRequired = error === EMAIL_CONFIRMATION_REQUIRED_MESSAGE;
 
   return (
     <form className="lamplight__form" onSubmit={handleSubmit} noValidate>
@@ -43,9 +45,14 @@ export function SignUpForm() {
       <h2 className="lamplight__form-title">Create your workspace</h2>
       <p className="lamplight__form-subtitle">Start managing payments in minutes</p>
 
-      {error && !isPending && (
+      {error && !isPending && !isConfirmationRequired && (
         <Alert variant="error" className="lamplight__form-alert">
           {error}
+        </Alert>
+      )}
+      {isConfirmationRequired && (
+        <Alert variant="info" className="lamplight__form-alert">
+          {EMAIL_CONFIRMATION_REQUIRED_MESSAGE}
         </Alert>
       )}
       {isPending && (
