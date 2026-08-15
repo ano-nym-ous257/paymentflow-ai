@@ -25,6 +25,8 @@ function createAuthClient() {
     signOut: vi.fn(),
     resetPasswordForEmail: vi.fn(),
     getUser: vi.fn(),
+    onAuthStateChange: vi.fn(),
+    updateUser: vi.fn(),
   };
 }
 
@@ -195,6 +197,81 @@ describe('SupabaseAuthAdapter', () => {
     expect(authClient.resetPasswordForEmail).not.toHaveBeenCalled();
   });
 
+  it('accepts a valid Supabase password-recovery event', async () => {
+    const authClient = createAuthClient();
+    const unsubscribe = vi.fn();
+    authClient.onAuthStateChange.mockImplementation((callback) => {
+      queueMicrotask(() => callback('PASSWORD_RECOVERY', { user: supabaseUser }));
+      return { data: { subscription: { unsubscribe } } };
+    });
+
+    await expect(createAdapter(authClient).initializePasswordRecovery()).resolves.toBeUndefined();
+    expect(unsubscribe).toHaveBeenCalledOnce();
+  });
+
+  it('rejects an unusable recovery session safely', async () => {
+    const authClient = createAuthClient();
+    authClient.onAuthStateChange.mockImplementation((callback) => {
+      queueMicrotask(() => callback('SIGNED_OUT', null));
+      return { data: { subscription: { unsubscribe: vi.fn() } } };
+    });
+
+    await expect(createAdapter(authClient).initializePasswordRecovery()).rejects.toThrow(
+      'This password recovery link is invalid or has expired.',
+    );
+  });
+
+  it('updates the password and terminates the recovery session', async () => {
+    const authClient = createAuthClient();
+    authClient.updateUser.mockResolvedValue({ data: { user: supabaseUser }, error: null });
+    authClient.signOut.mockResolvedValue({ error: null });
+
+    await expect(
+      createAdapter(authClient).updatePassword({ password: 'new-secure-password' }),
+    ).resolves.toBeUndefined();
+    expect(authClient.updateUser).toHaveBeenCalledWith({ password: 'new-secure-password' });
+    expect(authClient.signOut).toHaveBeenCalledOnce();
+  });
+
+  it('normalizes password-update provider failures', async () => {
+    const authClient = createAuthClient();
+    authClient.updateUser.mockResolvedValue({
+      data: { user: null },
+      error: { code: 'weak_password', message: 'provider detail' },
+    });
+
+    await expect(
+      createAdapter(authClient).updatePassword({ password: 'weak-password' }),
+    ).rejects.toThrow('Password does not meet the security requirements.');
+    expect(authClient.signOut).not.toHaveBeenCalled();
+  });
+
+  it('reports password-update success when recovery sign-out returns an error', async () => {
+    const authClient = createAuthClient();
+    authClient.updateUser.mockResolvedValue({ data: { user: supabaseUser }, error: null });
+    authClient.signOut.mockResolvedValue({
+      error: { message: 'provider sign-out failure' },
+    });
+
+    await expect(
+      createAdapter(authClient).updatePassword({ password: 'new-secure-password' }),
+    ).resolves.toBeUndefined();
+    expect(authClient.updateUser).toHaveBeenCalledOnce();
+    expect(authClient.signOut).toHaveBeenCalledOnce();
+  });
+
+  it('reports password-update success when recovery sign-out rejects', async () => {
+    const authClient = createAuthClient();
+    authClient.updateUser.mockResolvedValue({ data: { user: supabaseUser }, error: null });
+    authClient.signOut.mockRejectedValue(new Error('provider sign-out failure'));
+
+    await expect(
+      createAdapter(authClient).updatePassword({ password: 'new-secure-password' }),
+    ).resolves.toBeUndefined();
+    expect(authClient.updateUser).toHaveBeenCalledOnce();
+    expect(authClient.signOut).toHaveBeenCalledOnce();
+  });
+
   it.each([
     [{ code: 'email_not_confirmed' }, 'Please verify your email before signing in.'],
     [{ code: 'user_already_exists' }, 'An account with this email already exists.'],
@@ -204,6 +281,8 @@ describe('SupabaseAuthAdapter', () => {
       'Authentication is temporarily unavailable. Please try again.',
     ],
     [{ message: 'sensitive provider detail' }, 'Authentication failed. Please try again.'],
+    [{ code: 'same_password' }, 'New password must be different from your current password.'],
+    [{ code: 'session_expired' }, 'This password recovery link is invalid or has expired.'],
   ])('normalizes provider errors to safe application messages', (providerError, expected) => {
     expect(normalizeAuthError(providerError).message).toBe(expected);
   });

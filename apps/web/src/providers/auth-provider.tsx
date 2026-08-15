@@ -15,6 +15,8 @@ import type {
   LoginCredentials,
   SignupCredentials,
   ResetPasswordRequest,
+  UpdatePasswordRequest,
+  AuthActionResult,
 } from '@/lib/auth/types';
 import { authAdapter } from '@/lib/auth/adapter';
 
@@ -127,12 +129,40 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }, []);
 
+  const initializePasswordRecovery = useCallback(async (): Promise<AuthActionResult> => {
+    try {
+      await authAdapter.initializePasswordRecovery();
+      return { success: true };
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Password recovery failed';
+      return { success: false, error: message };
+    }
+  }, []);
+
+  const updatePassword = useCallback(
+    async (request: UpdatePasswordRequest): Promise<AuthActionResult> => {
+      setState((prev: AuthState) => ({ ...prev, isLoading: true, error: null }));
+      try {
+        await authAdapter.updatePassword(request);
+        setState(loggedOutState);
+        return { success: true };
+      } catch (err) {
+        const message = err instanceof Error ? err.message : 'Password update failed';
+        setState((prev: AuthState) => ({ ...prev, isLoading: false, error: message }));
+        return { success: false, error: message };
+      }
+    },
+    [],
+  );
+
   const value: AuthContextValue = {
     ...state,
     login,
     signup,
     logout,
     resetPassword,
+    initializePasswordRecovery,
+    updatePassword,
     clearError,
   };
 

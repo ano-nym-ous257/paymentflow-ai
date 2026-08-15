@@ -47,6 +47,12 @@ function AuthProbe() {
       >
         Sign up
       </button>
+      <button
+        type="button"
+        onClick={() => void auth.updatePassword({ password: 'new-secure-password' })}
+      >
+        Update password
+      </button>
     </div>
   );
 }
@@ -165,5 +171,22 @@ describe('AuthProvider', () => {
     await waitFor(() => expect(screen.getByTestId('authenticated')).toHaveTextContent('true'));
     expect(screen.getByTestId('initializing')).toHaveTextContent('false');
     expect(screen.getByTestId('user')).toHaveTextContent(user.email);
+  });
+
+  it('settles locally logged out after a successful password update', async () => {
+    vi.mocked(authAdapter.getCurrentUser).mockResolvedValue(user);
+    vi.spyOn(authAdapter, 'updatePassword').mockResolvedValue();
+    render(
+      <AuthProvider>
+        <AuthProbe />
+      </AuthProvider>,
+    );
+
+    await waitFor(() => expect(screen.getByTestId('authenticated')).toHaveTextContent('true'));
+    fireEvent.click(screen.getByRole('button', { name: 'Update password' }));
+
+    await waitFor(() => expect(screen.getByTestId('authenticated')).toHaveTextContent('false'));
+    expect(authAdapter.updatePassword).toHaveBeenCalledOnce();
+    expect(screen.getByTestId('user')).toHaveTextContent('none');
   });
 });

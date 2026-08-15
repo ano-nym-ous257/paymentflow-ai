@@ -36,10 +36,18 @@ export interface ResetPasswordRequest {
   email: string;
 }
 
+export interface UpdatePasswordRequest {
+  password: string;
+}
+
+export type AuthActionResult = { success: true } | { success: false; error: string };
+
 export interface AuthContextValue extends AuthState {
   login: (credentials: LoginCredentials) => Promise<void>;
   signup: (credentials: SignupCredentials) => Promise<void>;
   logout: () => Promise<void>;
   resetPassword: (request: ResetPasswordRequest) => Promise<void>;
+  initializePasswordRecovery: () => Promise<AuthActionResult>;
+  updatePassword: (request: UpdatePasswordRequest) => Promise<AuthActionResult>;
   clearError: () => void;
 }

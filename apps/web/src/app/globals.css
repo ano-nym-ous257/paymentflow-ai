@@ -2912,6 +2912,52 @@ body::after {
   margin: 0;
 }
 
+.password-recovery-page {
+  display: flex;
+  min-height: 100svh;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6);
+  background:
+    radial-gradient(ellipse 60% 55% at 50% 35%, rgba(255, 214, 102, 0.08), transparent 65%),
+    var(--bg-base);
+}
+
+.password-recovery-card {
+  width: min(100%, 480px);
+  padding: var(--space-8);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-xl);
+  background: var(--surface);
+  box-shadow: var(--shadow-lg);
+}
+
+.password-recovery__brand {
+  display: inline-block;
+  margin-bottom: var(--space-8);
+  color: var(--text-primary);
+  font-size: var(--text-h3);
+  font-weight: var(--weight-bold);
+  text-decoration: none;
+}
+
+.password-recovery__status {
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.password-recovery__link {
+  display: inline-flex;
+  justify-content: center;
+  color: var(--accent);
+  font-weight: var(--weight-semibold);
+  text-decoration: none;
+}
+
+.password-recovery__link:hover {
+  text-decoration: underline;
+}
+
 /* ========================================
    Input Field — Base Styles
    ======================================== */
