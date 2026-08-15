@@ -101,6 +101,32 @@ describe('LamplightAuth', () => {
       const panel = screen.getByRole('region', { name: 'Authentication' });
       expect(panel).toHaveAttribute('aria-hidden', 'false');
     });
+
+    it('exposes Forgot Password from sign in and opens the recovery request state', () => {
+      renderWithProviders(<LamplightAuth initialMode="signin" />);
+      fireEvent.click(screen.getByLabelText('Open sign in form'));
+      act(() => {
+        vi.advanceTimersByTime(350);
+      });
+
+      fireEvent.click(screen.getByRole('button', { name: 'Forgot password?' }));
+
+      expect(screen.getByRole('heading', { name: 'Reset your password' })).toBeInTheDocument();
+      expect(screen.getByLabelText('Email')).toBeInTheDocument();
+    });
+
+    it('returns from password recovery to sign in', () => {
+      renderWithProviders(<LamplightAuth initialMode="signin" />);
+      fireEvent.click(screen.getByLabelText('Open sign in form'));
+      act(() => {
+        vi.advanceTimersByTime(350);
+      });
+      fireEvent.click(screen.getByRole('button', { name: 'Forgot password?' }));
+
+      fireEvent.click(screen.getByRole('button', { name: 'Return to sign in' }));
+
+      expect(screen.getByRole('heading', { name: 'Welcome back' })).toBeInTheDocument();
+    });
   });
 
   describe('close button', () => {

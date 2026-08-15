@@ -1,1 +1,1 @@
-export type AuthView = 'closed' | 'signin' | 'signup';
+export type AuthView = 'closed' | 'signin' | 'signup' | 'recovery';

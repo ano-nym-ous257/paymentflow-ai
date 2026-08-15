@@ -3,15 +3,17 @@
 import type { AuthView } from './auth.types';
 import { SignInForm } from './SignInForm';
 import { SignUpForm } from './SignUpForm';
+import { PasswordRecoveryRequestForm } from './PasswordRecoveryRequestForm';
 import { IconButton } from '@paymentflow/ui';
 
 export interface AuthPanelProps {
   view: AuthView;
   onClose: () => void;
+  onViewChange: (view: Exclude<AuthView, 'closed'>) => void;
   panelId: string;
 }
 
-export function AuthPanel({ view, onClose, panelId }: AuthPanelProps) {
+export function AuthPanel({ view, onClose, onViewChange, panelId }: AuthPanelProps) {
   const isOpen = view !== 'closed';
 
   return (
@@ -47,8 +49,13 @@ export function AuthPanel({ view, onClose, panelId }: AuthPanelProps) {
               className="lamplight__form-container"
               data-direction={view === 'signup' ? 'forward' : 'backward'}
             >
-              {view === 'signin' && <SignInForm />}
+              {view === 'signin' && (
+                <SignInForm onForgotPassword={() => onViewChange('recovery')} />
+              )}
               {view === 'signup' && <SignUpForm />}
+              {view === 'recovery' && (
+                <PasswordRecoveryRequestForm onBack={() => onViewChange('signin')} />
+              )}
             </div>
           )}
         </div>

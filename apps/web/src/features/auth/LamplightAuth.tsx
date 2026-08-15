@@ -38,6 +38,14 @@ export function LamplightAuth({ initialMode }: LamplightAuthProps) {
     setView('closed');
   }, [clearError]);
 
+  const handleViewChange = useCallback(
+    (nextView: Exclude<AuthView, 'closed'>) => {
+      clearError();
+      setView(nextView);
+    },
+    [clearError],
+  );
+
   const isOpen = view !== 'closed';
 
   const pullLabel =
@@ -57,7 +65,12 @@ export function LamplightAuth({ initialMode }: LamplightAuthProps) {
         view={view}
         panelId={PANEL_ID}
       />
-      <AuthPanel view={view} onClose={handleClose} panelId={PANEL_ID} />
+      <AuthPanel
+        view={view}
+        onClose={handleClose}
+        onViewChange={handleViewChange}
+        panelId={PANEL_ID}
+      />
     </div>
   );
 }

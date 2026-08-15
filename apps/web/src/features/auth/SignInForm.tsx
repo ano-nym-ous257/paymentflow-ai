@@ -6,7 +6,11 @@ import { PasswordField } from './PasswordField';
 import { validateLoginForm } from '@/lib/auth/validation';
 import { useAuth } from '@/providers/auth-provider';
 
-export function SignInForm() {
+export interface SignInFormProps {
+  onForgotPassword: () => void;
+}
+
+export function SignInForm({ onForgotPassword }: SignInFormProps) {
   const { login, isLoading, error, clearError } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -70,6 +74,9 @@ export function SignInForm() {
           }}
           error={fieldErrors['password']}
         />
+        <button type="button" className="lamplight__text-action" onClick={onForgotPassword}>
+          Forgot password?
+        </button>
       </div>
 
       <Button

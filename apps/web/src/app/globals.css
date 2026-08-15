@@ -2912,6 +2912,28 @@ body::after {
   margin: 0;
 }
 
+.lamplight__text-action {
+  align-self: flex-end;
+  padding: 0;
+  background: none;
+  border: none;
+  color: var(--accent);
+  cursor: pointer;
+  font: inherit;
+  font-size: var(--text-body-sm);
+  font-weight: var(--weight-semibold);
+}
+
+.lamplight__text-action:hover {
+  text-decoration: underline;
+}
+
+.lamplight__text-action:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 3px;
+  border-radius: var(--radius-xs);
+}
+
 .password-recovery-page {
   display: flex;
   min-height: 100svh;

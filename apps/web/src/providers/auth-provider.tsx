@@ -118,16 +118,21 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }, []);
 
-  const resetPassword = useCallback(async (request: ResetPasswordRequest) => {
-    setState((prev: AuthState) => ({ ...prev, isLoading: true, error: null }));
-    try {
-      await authAdapter.resetPassword(request);
-      setState((prev: AuthState) => ({ ...prev, isLoading: false }));
-    } catch (err) {
-      const message = err instanceof Error ? err.message : 'Password reset failed';
-      setState((prev: AuthState) => ({ ...prev, isLoading: false, error: message }));
-    }
-  }, []);
+  const resetPassword = useCallback(
+    async (request: ResetPasswordRequest): Promise<AuthActionResult> => {
+      setState((prev: AuthState) => ({ ...prev, isLoading: true, error: null }));
+      try {
+        await authAdapter.resetPassword(request);
+        setState((prev: AuthState) => ({ ...prev, isLoading: false }));
+        return { success: true };
+      } catch (err) {
+        const message = err instanceof Error ? err.message : 'Password reset failed';
+        setState((prev: AuthState) => ({ ...prev, isLoading: false, error: message }));
+        return { success: false, error: message };
+      }
+    },
+    [],
+  );
 
   const initializePasswordRecovery = useCallback(async (): Promise<AuthActionResult> => {
     try {
