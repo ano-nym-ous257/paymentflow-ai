@@ -4,7 +4,7 @@ import type {
   SignupCredentials,
   ResetPasswordRequest,
   UpdatePasswordRequest,
-  User,
+  AuthenticatedUser,
 } from './types';
 import {
   normalizeAuthError,
@@ -16,13 +16,13 @@ import { getPasswordRecoveryRedirectUrl } from '@/lib/supabase/config';
 
 /** Application-level contract implemented by platform-specific authentication backends. */
 export interface AuthAdapter {
-  login: (credentials: LoginCredentials) => Promise<User>;
-  signup: (credentials: SignupCredentials) => Promise<User>;
+  login: (credentials: LoginCredentials) => Promise<AuthenticatedUser>;
+  signup: (credentials: SignupCredentials) => Promise<AuthenticatedUser>;
   logout: () => Promise<void>;
   resetPassword: (request: ResetPasswordRequest) => Promise<void>;
   initializePasswordRecovery: () => Promise<void>;
   updatePassword: (request: UpdatePasswordRequest) => Promise<void>;
-  getCurrentUser: () => Promise<User | null>;
+  getCurrentUser: () => Promise<AuthenticatedUser | null>;
 }
 
 type SupabaseAuthClient = Pick<
@@ -56,7 +56,7 @@ export class SupabaseAuthAdapter implements AuthAdapter {
     private readonly getPasswordRecoveryRedirect: PasswordRecoveryRedirectFactory = getPasswordRecoveryRedirectUrl,
   ) {}
 
-  async login(credentials: LoginCredentials): Promise<User> {
+  async login(credentials: LoginCredentials): Promise<AuthenticatedUser> {
     let response;
     try {
       const authClient = await this.getAuthClient();
@@ -74,7 +74,7 @@ export class SupabaseAuthAdapter implements AuthAdapter {
     return mapSupabaseUser(data.user);
   }
 
-  async signup(credentials: SignupCredentials): Promise<User> {
+  async signup(credentials: SignupCredentials): Promise<AuthenticatedUser> {
     let response;
     try {
       const authClient = await this.getAuthClient();
@@ -176,7 +176,7 @@ export class SupabaseAuthAdapter implements AuthAdapter {
     }
   }
 
-  async getCurrentUser(): Promise<User | null> {
+  async getCurrentUser(): Promise<AuthenticatedUser | null> {
     let response;
     try {
       const authClient = await this.getAuthClient();

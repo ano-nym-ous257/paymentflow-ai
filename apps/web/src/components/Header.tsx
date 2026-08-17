@@ -3,13 +3,17 @@
 import { useCallback, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/providers/auth-provider';
+import { useProfile } from '@/providers/profile-provider';
+import { getIdentityDisplayName, getIdentityInitials } from '@/lib/profile/presentation';
 
 export interface HeaderProps {
   onMenuToggle: () => void;
 }
 
 export function Header({ onMenuToggle }: HeaderProps) {
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
+  const { profile } = useProfile();
+  const displayName = getIdentityDisplayName(profile, user);
   const logoutInProgress = useRef(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
@@ -94,8 +98,12 @@ export function Header({ onMenuToggle }: HeaderProps) {
             </svg>
             <span className="header__notif-dot" aria-label="3 unread notifications" />
           </button>
-          <button type="button" className="header__avatar" aria-label="User menu">
-            <span className="header__avatar-initials">MR</span>
+          <button
+            type="button"
+            className="header__avatar"
+            aria-label={`User menu for ${displayName}`}
+          >
+            <span className="header__avatar-initials">{getIdentityInitials(displayName)}</span>
           </button>
           <button
             type="button"

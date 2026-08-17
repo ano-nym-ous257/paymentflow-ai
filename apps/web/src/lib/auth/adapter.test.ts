@@ -43,9 +43,6 @@ describe('SupabaseAuthAdapter', () => {
     expect(mapSupabaseUser(supabaseUser)).toEqual({
       id: supabaseUser.id,
       email: supabaseUser.email,
-      name: 'PaymentFlow Owner',
-      role: 'viewer',
-      organization: '',
       createdAt: supabaseUser.created_at,
     });
   });
@@ -59,7 +56,11 @@ describe('SupabaseAuthAdapter', () => {
 
     await expect(
       createAdapter(authClient).login({ email: supabaseUser.email!, password: 'test-password' }),
-    ).resolves.toMatchObject({ id: supabaseUser.id, role: 'viewer' });
+    ).resolves.toEqual({
+      id: supabaseUser.id,
+      email: supabaseUser.email,
+      createdAt: supabaseUser.created_at,
+    });
     expect(authClient.signInWithPassword).toHaveBeenCalledWith({
       email: supabaseUser.email,
       password: 'test-password',
@@ -101,7 +102,11 @@ describe('SupabaseAuthAdapter', () => {
         password: 'test-password',
         organization: 'Ignored Organization',
       }),
-    ).resolves.toMatchObject({ id: supabaseUser.id, role: 'viewer', organization: '' });
+    ).resolves.toEqual({
+      id: supabaseUser.id,
+      email: supabaseUser.email,
+      createdAt: supabaseUser.created_at,
+    });
     expect(authClient.signUp).toHaveBeenCalledWith({
       email: supabaseUser.email,
       password: 'test-password',
@@ -139,7 +144,7 @@ describe('SupabaseAuthAdapter', () => {
 
     await expect(createAdapter(authClient).getCurrentUser()).resolves.toMatchObject({
       id: supabaseUser.id,
-      role: 'viewer',
+      email: supabaseUser.email,
     });
   });
 

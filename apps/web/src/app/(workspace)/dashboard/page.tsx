@@ -10,6 +10,9 @@ import {
   notifications,
 } from '@paymentflow/mock-data';
 import { PageContainer } from '@/components/PageContainer';
+import { useAuth } from '@/providers/auth-provider';
+import { useProfile } from '@/providers/profile-provider';
+import { getIdentityDisplayName } from '@/lib/profile/presentation';
 
 const CURRENCY_SYMBOLS: Record<string, string> = {
   USD: '$',
@@ -84,6 +87,9 @@ const QUICK_ACTIONS = [
 ] as const;
 
 export default function DashboardPage() {
+  const { user } = useAuth();
+  const { profile } = useProfile();
+  const displayName = getIdentityDisplayName(profile, user);
   const recentTransactions = transactions.slice(0, 5);
   const topRates = exchangeRates.slice(0, 4);
   const upcomingPayments = pendingPayments.slice(0, 4);
@@ -97,7 +103,7 @@ export default function DashboardPage() {
           <div className="dashboard__hero">
             <div className="dashboard__hero-content">
               <h1 id="hero-heading" className="dashboard__heading">
-                Good morning, Michael
+                Good morning, {displayName}
               </h1>
               <p className="dashboard__subheading">
                 Wednesday, July 16, 2026 — {dashboardSummary.pendingPayments} pending payments

@@ -2,6 +2,9 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useAuth } from '@/providers/auth-provider';
+import { useProfile } from '@/providers/profile-provider';
+import { getIdentityDisplayName, getIdentityInitials } from '@/lib/profile/presentation';
 
 export interface SidebarProps {
   isOpen: boolean;
@@ -104,6 +107,9 @@ const NAV_ITEMS: readonly NavItem[] = [
 ];
 
 export function Sidebar({ isOpen, onClose }: SidebarProps) {
+  const { user } = useAuth();
+  const { profile } = useProfile();
+  const displayName = getIdentityDisplayName(profile, user);
   const pathname = usePathname();
 
   let currentGroup: string | undefined;
@@ -164,11 +170,11 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
       <div className="sidebar__footer">
         <div className="sidebar__user">
           <div className="sidebar__user-avatar">
-            <span>MR</span>
+            <span>{getIdentityInitials(displayName)}</span>
           </div>
           <div className="sidebar__user-info">
-            <span className="sidebar__user-name">Michael R.</span>
-            <span className="sidebar__user-role">Finance Manager</span>
+            <span className="sidebar__user-name">{displayName}</span>
+            <span className="sidebar__user-role">{user?.email ?? ''}</span>
           </div>
         </div>
       </div>

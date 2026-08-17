@@ -1,9 +1,10 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { authAdapter } from '@/lib/auth/adapter';
-import type { User } from '@/lib/auth/types';
+import type { AuthenticatedUser } from '@/lib/auth/types';
 import { AppShell } from '@/components/AppShell';
 import { AuthProvider } from './auth-provider';
+import { ProfileProvider } from './profile-provider';
 import { AuthGuard, WorkspaceGuard } from './auth-route-guards';
 
 const { replace } = vi.hoisted(() => ({ replace: vi.fn() }));
@@ -13,12 +14,9 @@ vi.mock('next/navigation', () => ({
   usePathname: () => '/dashboard',
 }));
 
-const user: User = {
+const user: AuthenticatedUser = {
   id: 'user-1',
   email: 'owner@paymentflow.test',
-  name: 'PaymentFlow Owner',
-  role: 'admin',
-  organization: 'PaymentFlow',
   createdAt: '2026-08-14T00:00:00.000Z',
 };
 
@@ -84,9 +82,11 @@ describe('authentication route guards', () => {
     vi.spyOn(authAdapter, 'logout').mockResolvedValue();
     render(
       <AuthProvider>
-        <WorkspaceGuard>
-          <AppShell>Protected workspace</AppShell>
-        </WorkspaceGuard>
+        <ProfileProvider repository={{ getByAuthenticatedUserId: vi.fn().mockResolvedValue(null) }}>
+          <WorkspaceGuard>
+            <AppShell>Protected workspace</AppShell>
+          </WorkspaceGuard>
+        </ProfileProvider>
       </AuthProvider>,
     );
 

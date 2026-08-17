@@ -2,18 +2,14 @@
  * Authentication types for PaymentFlow AI
  */
 
-export interface User {
+export interface AuthenticatedUser {
   id: string;
   email: string;
-  name: string;
-  avatar?: string;
-  role: 'admin' | 'analyst' | 'viewer';
-  organization: string;
   createdAt: string;
 }
 
 export interface AuthState {
-  user: User | null;
+  user: AuthenticatedUser | null;
   isAuthenticated: boolean;
   isInitializing: boolean;
   isLoading: boolean;

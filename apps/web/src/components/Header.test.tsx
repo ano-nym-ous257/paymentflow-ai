@@ -5,7 +5,29 @@ import { Header } from './Header';
 const { logout } = vi.hoisted(() => ({ logout: vi.fn() }));
 
 vi.mock('@/providers/auth-provider', () => ({
-  useAuth: () => ({ logout }),
+  useAuth: () => ({
+    logout,
+    user: {
+      id: 'user-1',
+      email: 'owner@paymentflow.test',
+      createdAt: '2026-08-14T00:00:00.000Z',
+    },
+  }),
+}));
+
+vi.mock('@/providers/profile-provider', () => ({
+  useProfile: () => ({
+    status: 'available',
+    profile: {
+      id: 'user-1',
+      displayName: 'PaymentFlow Owner',
+      avatarUrl: null,
+      status: 'active',
+      createdAt: '2026-08-14T00:00:00.000Z',
+      updatedAt: '2026-08-14T00:00:00.000Z',
+    },
+    error: null,
+  }),
 }));
 
 vi.mock('next/link', () => ({
@@ -23,6 +45,15 @@ describe('Header logout control', () => {
     render(<Header onMenuToggle={vi.fn()} />);
 
     expect(screen.getByRole('button', { name: 'Log out' })).toBeEnabled();
+  });
+
+  it('uses profile identity instead of hard-coded avatar initials', () => {
+    render(<Header onMenuToggle={vi.fn()} />);
+
+    expect(
+      screen.getByRole('button', { name: 'User menu for PaymentFlow Owner' }),
+    ).toHaveTextContent('PO');
+    expect(screen.queryByText('MR')).not.toBeInTheDocument();
   });
 
   it('calls the existing authentication context logout action', () => {

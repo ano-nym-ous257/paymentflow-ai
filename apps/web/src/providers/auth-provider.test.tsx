@@ -1,15 +1,12 @@
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { authAdapter } from '@/lib/auth/adapter';
-import type { User } from '@/lib/auth/types';
+import type { AuthenticatedUser } from '@/lib/auth/types';
 import { AuthProvider, useAuth } from './auth-provider';
 
-const user: User = {
+const user: AuthenticatedUser = {
   id: 'user-1',
   email: 'owner@paymentflow.test',
-  name: 'PaymentFlow Owner',
-  role: 'admin',
-  organization: 'PaymentFlow',
   createdAt: '2026-08-14T00:00:00.000Z',
 };
 
@@ -42,7 +39,11 @@ function AuthProbe() {
       <button
         type="button"
         onClick={() =>
-          void auth.signup({ name: user.name, email: user.email, password: 'test-password' })
+          void auth.signup({
+            name: 'PaymentFlow Owner',
+            email: user.email,
+            password: 'test-password',
+          })
         }
       >
         Sign up
@@ -67,7 +68,7 @@ describe('AuthProvider', () => {
   });
 
   it('begins initializing and calls getCurrentUser exactly once per mount', async () => {
-    const currentUser = deferred<User | null>();
+    const currentUser = deferred<AuthenticatedUser | null>();
     vi.mocked(authAdapter.getCurrentUser).mockReturnValue(currentUser.promise);
 
     const first = render(
