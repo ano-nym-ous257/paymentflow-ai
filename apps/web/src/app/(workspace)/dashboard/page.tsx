@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { Card, Grid, Stack, Badge, Divider, Button } from '@paymentflow/ui';
 import {
   dashboardSummary,
@@ -13,6 +14,7 @@ import { PageContainer } from '@/components/PageContainer';
 import { useAuth } from '@/providers/auth-provider';
 import { useProfile } from '@/providers/profile-provider';
 import { getIdentityDisplayName } from '@/lib/profile/presentation';
+import { formatLocalDate, getGreetingForHour } from '@/lib/date-time';
 
 const CURRENCY_SYMBOLS: Record<string, string> = {
   USD: '$',
@@ -87,6 +89,7 @@ const QUICK_ACTIONS = [
 ] as const;
 
 export default function DashboardPage() {
+  const [localNow, setLocalNow] = useState<Date | null>(null);
   const { user } = useAuth();
   const { profile } = useProfile();
   const displayName = getIdentityDisplayName(profile, user);
@@ -94,6 +97,13 @@ export default function DashboardPage() {
   const topRates = exchangeRates.slice(0, 4);
   const upcomingPayments = pendingPayments.slice(0, 4);
   const unreadNotifications = notifications.filter((n) => !n.read);
+
+  useEffect(() => {
+    setLocalNow(new Date());
+  }, []);
+
+  const greeting = localNow ? getGreetingForHour(localNow.getHours()) : 'Welcome';
+  const formattedDate = localNow ? formatLocalDate(localNow) : null;
 
   return (
     <PageContainer>
@@ -103,11 +113,11 @@ export default function DashboardPage() {
           <div className="dashboard__hero">
             <div className="dashboard__hero-content">
               <h1 id="hero-heading" className="dashboard__heading">
-                Good morning, {displayName}
+                {greeting}, {displayName}
               </h1>
               <p className="dashboard__subheading">
-                Wednesday, July 16, 2026 — {dashboardSummary.pendingPayments} pending payments
-                require attention
+                {formattedDate ? `${formattedDate} — ` : ''}
+                {dashboardSummary.pendingPayments} pending payments require attention
               </p>
             </div>
             <div className="dashboard__hero-summary">
