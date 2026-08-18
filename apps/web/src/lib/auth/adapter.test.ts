@@ -1,5 +1,6 @@
 import type { SupabaseClient, User as SupabaseUser } from '@supabase/supabase-js';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, expectTypeOf, it, vi } from 'vitest';
+import type { SignupCredentials } from './types';
 import { SupabaseAuthAdapter } from './adapter';
 import { EMAIL_CONFIRMATION_REQUIRED_MESSAGE, normalizeAuthError } from './errors';
 import { mapSupabaseUser } from './supabase-user-mapper';
@@ -45,6 +46,10 @@ describe('SupabaseAuthAdapter', () => {
       email: supabaseUser.email,
       createdAt: supabaseUser.created_at,
     });
+  });
+
+  it('keeps organization authority out of signup credentials', () => {
+    expectTypeOf<SignupCredentials>().not.toHaveProperty('organization');
   });
 
   it('logs in with email and password and returns an application user', async () => {
@@ -100,7 +105,6 @@ describe('SupabaseAuthAdapter', () => {
         name: 'PaymentFlow Owner',
         email: supabaseUser.email!,
         password: 'test-password',
-        organization: 'Ignored Organization',
       }),
     ).resolves.toEqual({
       id: supabaseUser.id,

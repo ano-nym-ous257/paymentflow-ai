@@ -25,7 +25,6 @@ export interface SignupCredentials {
   name: string;
   email: string;
   password: string;
-  organization?: string;
 }
 
 export interface ResetPasswordRequest {
